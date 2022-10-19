@@ -20,6 +20,7 @@ export class Users extends Entity {
   @property({
     type: 'string',
     required: true,
+    index: {unique: true},
   })
   email: string;
 
