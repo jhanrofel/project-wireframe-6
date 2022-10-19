@@ -6,3 +6,4 @@ export * from './users-chats.controller';
 export * from './chats-users.controller';
 export * from './users-uploads.controller';
 export * from './uploads-users.controller';
+export * from './share-to.controller';
