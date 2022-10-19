@@ -19,6 +19,7 @@ import {
 } from '@loopback/rest';
 import {Users} from '../models';
 import {UsersRepository} from '../repositories';
+import {genSalt, hash} from 'bcryptjs';
 
 export class UsersController {
   constructor(
@@ -44,6 +45,8 @@ export class UsersController {
     })
     users: Omit<Users, '_id'>,
   ): Promise<Users> {
+    // users.password = await hash(users.password, 10);
+    users.password = await hash(users.password, await genSalt());
     return this.usersRepository.create(users);
   }
 
