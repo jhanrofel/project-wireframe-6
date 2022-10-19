@@ -73,7 +73,7 @@ export class ChatsController {
   async find(
     @param.filter(Chats) filter?: Filter<Chats>,
   ): Promise<Chats[]> {
-    return this.chatsRepository.find(filter);
+    return this.chatsRepository.find({include:[{relation:'chatUser',scope:{fields:['fullname']}}]});
   }
 
   @patch('/chats')
