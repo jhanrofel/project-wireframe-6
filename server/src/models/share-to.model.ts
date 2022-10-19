@@ -9,6 +9,15 @@ export class ShareTo extends Entity {
   })
   _id?: string;
 
+  @property({
+    type: 'string',
+  })
+  upload?: string;
+
+  @property({
+    type: 'string',
+  })
+  user?: string;
 
   constructor(data?: Partial<ShareTo>) {
     super(data);
