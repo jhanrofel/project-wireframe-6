@@ -19,12 +19,12 @@ import {
 } from '@loopback/rest';
 import {Users} from '../models';
 import {UsersRepository} from '../repositories';
-import {genSalt, hash} from 'bcryptjs';
+import {genSalt, hash, compare} from 'bcryptjs';
 
 export class UsersController {
   constructor(
     @repository(UsersRepository)
-    public usersRepository : UsersRepository,
+    public usersRepository: UsersRepository,
   ) {}
 
   @post('/users')
@@ -55,9 +55,7 @@ export class UsersController {
     description: 'Users model count',
     content: {'application/json': {schema: CountSchema}},
   })
-  async count(
-    @param.where(Users) where?: Where<Users>,
-  ): Promise<Count> {
+  async count(@param.where(Users) where?: Where<Users>): Promise<Count> {
     return this.usersRepository.count(where);
   }
 
@@ -73,9 +71,7 @@ export class UsersController {
       },
     },
   })
-  async find(
-    @param.filter(Users) filter?: Filter<Users>,
-  ): Promise<Users[]> {
+  async find(@param.filter(Users) filter?: Filter<Users>): Promise<Users[]> {
     return this.usersRepository.find(filter);
   }
 
@@ -109,7 +105,8 @@ export class UsersController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Users, {exclude: 'where'}) filter?: FilterExcludingWhere<Users>
+    @param.filter(Users, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Users>,
   ): Promise<Users> {
     return this.usersRepository.findById(id, filter);
   }
@@ -149,5 +146,37 @@ export class UsersController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.usersRepository.deleteById(id);
+  }
+
+  @post('/users/login')
+  @response(200, {
+    description: 'Users Login',
+    content: {'application/json': {schema: getModelSchemaRef(Users)}},
+  })
+  async findUser(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Users, {
+            title: 'Login',
+            exclude: ['_id', 'fullname'],
+          }),
+        },
+      },
+    })
+    userLogin: Omit<Users, '_id'>,
+  ): Promise<Users | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: {email: userLogin.email},
+    });
+    try {
+      if (!user) throw new Error('User not found.');
+      if (!(await compare(userLogin.password, user.password)))
+        throw new Error('Invalid password.');
+      user.password = '';
+      return user;
+    } catch (error) {
+      return error.message;
+    }
   }
 }
