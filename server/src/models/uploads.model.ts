@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {Users} from './users.model';
 
 @model()
 export class Uploads extends Entity {
@@ -27,6 +28,8 @@ export class Uploads extends Entity {
   })
   fileLocation: string;
 
+  @belongsTo(() => Users, {name: 'uploadUser'})
+  user: string;
 
   constructor(data?: Partial<Uploads>) {
     super(data);
