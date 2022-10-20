@@ -8,3 +8,4 @@ export * from './users-uploads.controller';
 export * from './uploads-users.controller';
 export * from './share-to.controller';
 export * from './file-upload.controller';
+export * from './file-download.controller';
