@@ -44,10 +44,23 @@ export class UsersController {
       },
     })
     users: Omit<Users, '_id'>,
-  ): Promise<Users> {
-    // users.password = await hash(users.password, 10);
+  ): Promise<Users | void> {
     users.password = await hash(users.password, await genSalt());
-    return this.usersRepository.create(users);
+    const response = this.usersRepository
+      .create(users)
+      .then(res => {
+        res.password = '';
+        return res;
+      })
+      .catch(err => {
+        if (err.code == 11000) {
+          return `${err.keyValue.email} email already exist.`;
+        } else {
+          return err;
+        }
+      });
+
+    return response;
   }
 
   @get('/users/count')
@@ -72,7 +85,7 @@ export class UsersController {
     },
   })
   async find(@param.filter(Users) filter?: Filter<Users>): Promise<Users[]> {
-    return this.usersRepository.find(filter);
+    return this.usersRepository.find({fields:{password:false}});
   }
 
   @patch('/users')
@@ -108,7 +121,7 @@ export class UsersController {
     @param.filter(Users, {exclude: 'where'})
     filter?: FilterExcludingWhere<Users>,
   ): Promise<Users> {
-    return this.usersRepository.findById(id, filter);
+    return this.usersRepository.findById(id, {fields:{password:false}});
   }
 
   @patch('/users/{id}')
@@ -120,13 +133,24 @@ export class UsersController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Users, {partial: true}),
+          schema: getModelSchemaRef(Users, {exclude:['_id','password']}),
         },
       },
     })
-    users: Users,
+    users: Omit<Users, '_id,password'>,
   ): Promise<void> {
-    await this.usersRepository.updateById(id, users);
+    const response = this.usersRepository
+      .updateById(id, users)
+      .then()
+      .catch(err => {
+        if (err.code == 11000) {
+          return `${err.keyValue.email} email already exist.`;
+        } else {
+          return err;
+        }
+      });
+
+    return response;
   }
 
   @put('/users/{id}')
