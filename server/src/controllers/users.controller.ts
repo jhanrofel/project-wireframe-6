@@ -9,14 +9,16 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Users} from '../models';
-import {UsersRepository} from '../repositories';
+import {ShareTo, Users} from '../models';
+import {UsersRepository, ShareToRepository} from '../repositories';
 import {genSalt, hash, compare} from 'bcryptjs';
 
 export class UsersController {
   constructor(
     @repository(UsersRepository)
     public usersRepository: UsersRepository,
+    @repository(ShareToRepository)
+    public shareToRepository: ShareToRepository,
   ) {}
 
   @post('/users')
@@ -153,5 +155,33 @@ export class UsersController {
     } catch (error) {
       return error.message;
     }
+  }
+
+  @get('/users/{id}/share-tos')
+  @response(200, {
+    description: 'Array of Users from Share To instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(ShareTo),
+      },
+    },
+  })
+  async findShareToByUserId(
+    @param.path.string('id') id: string,
+  ): Promise<ShareTo[] | void> {
+    return this.shareToRepository.find({
+      where: {user: id},
+      include: [
+        {
+          relation: 'shareToUpload',
+          scope: {
+            fields: ['label', 'filename', 'fileLocation', 'user'],
+            include: [
+              {relation: 'uploadUser', scope: {fields: ['fullname', 'email']}},
+            ],
+          },
+        },
+      ],
+    });
   }
 }

@@ -5,8 +5,9 @@ import {
   repository,
 } from '@loopback/repository';
 import {MongoDbDataSource} from '../datasources';
-import {ShareTo, ShareToRelations, Users} from '../models';
+import {ShareTo, ShareToRelations, Uploads, Users} from '../models';
 import {UsersRepository} from './users.repository';
+import {UploadsRepository} from './uploads.repository';
 
 export class ShareToRepository extends DefaultCrudRepository<
   ShareTo,
@@ -17,13 +18,21 @@ export class ShareToRepository extends DefaultCrudRepository<
     Users,
     typeof ShareTo.prototype._id
   >;
+  
+  public readonly shareToUpload: BelongsToAccessor<
+    Uploads,
+    typeof ShareTo.prototype._id
+  >;
 
   constructor(
     @inject('datasources.MongoDB') dataSource: MongoDbDataSource,
     @repository.getter('UsersRepository')
     protected usersRepositoryGetter: Getter<UsersRepository>,
+    @repository.getter('UploadsRepository')
+    protected uploadsRepositoryGetter: Getter<UploadsRepository>,
   ) {
     super(ShareTo, dataSource);
+
     this.shareToUser = this.createBelongsToAccessorFor(
       'shareToUser',
       usersRepositoryGetter,
@@ -32,5 +41,15 @@ export class ShareToRepository extends DefaultCrudRepository<
       'shareToUser',
       this.shareToUser.inclusionResolver,
     );
+
+    this.shareToUpload = this.createBelongsToAccessorFor(
+      'shareToUpload',
+      uploadsRepositoryGetter,
+    );
+    this.registerInclusionResolver(
+      'shareToUpload',
+      this.shareToUpload.inclusionResolver,
+    );
+    
   }
 }
