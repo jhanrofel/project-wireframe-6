@@ -9,13 +9,15 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Uploads} from '../models';
-import {UploadsRepository} from '../repositories';
+import {Uploads,ShareTo} from '../models';
+import {UploadsRepository,ShareToRepository} from '../repositories';
 
 export class UploadsController {
   constructor(
     @repository(UploadsRepository)
     public uploadsRepository: UploadsRepository,
+    @repository(ShareToRepository)
+    public shareToRepository: ShareToRepository,
   ) {}
 
   @post('/uploads')
@@ -84,4 +86,24 @@ export class UploadsController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.uploadsRepository.deleteById(id);
   }
+
+  @get('/uploads/{id}/share-tos')
+  @response(200, {
+    description: 'Array of Uploads from Share To instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(ShareTo),
+      },
+    },
+  })
+  async findShareToByUploadId(
+    @param.path.string('id') id: string,
+  ): Promise<ShareTo[] | void> {
+    return this.shareToRepository.find({
+      where: {upload: id},
+      include: [{relation: 'shareToUser', scope: {fields: ['fullname']}}],
+    });
+  }
+
+
 }

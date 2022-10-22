@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {Users} from './users.model';
 
 @model()
 export class ShareTo extends Entity {
@@ -14,10 +15,8 @@ export class ShareTo extends Entity {
   })
   upload?: string;
 
-  @property({
-    type: 'string',
-  })
-  user?: string;
+  @belongsTo(() => Users, {name: 'shareToUser'})
+  user: string;
 
   constructor(data?: Partial<ShareTo>) {
     super(data);
