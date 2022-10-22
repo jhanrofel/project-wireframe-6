@@ -45,7 +45,7 @@ export class ShareToController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(ShareTo, {includeRelations: true}),
+          items: getModelSchemaRef(ShareTo),
         },
       },
     },
