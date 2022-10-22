@@ -59,7 +59,7 @@ export class ShareToController {
     description: 'ShareTo model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(ShareTo, {includeRelations: true}),
+        schema: getModelSchemaRef(ShareTo),
       },
     },
   })
