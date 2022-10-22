@@ -9,8 +9,12 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Uploads,ShareTo} from '../models';
-import {UploadsRepository,ShareToRepository} from '../repositories';
+import {Uploads, ShareTo, Users} from '../models';
+import {
+  UploadsRepository,
+  ShareToRepository,
+  UsersRepository,
+} from '../repositories';
 
 export class UploadsController {
   constructor(
@@ -18,6 +22,8 @@ export class UploadsController {
     public uploadsRepository: UploadsRepository,
     @repository(ShareToRepository)
     public shareToRepository: ShareToRepository,
+    @repository(UsersRepository)
+    public usersRepository: UsersRepository,
   ) {}
 
   @post('/uploads')
@@ -70,7 +76,9 @@ export class UploadsController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Uploads, {exclude: ['_id','filename','fileLocation','user']}),
+          schema: getModelSchemaRef(Uploads, {
+            exclude: ['_id', 'filename', 'fileLocation', 'user'],
+          }),
         },
       },
     })
@@ -105,5 +113,26 @@ export class UploadsController {
     });
   }
 
-
+  @get('/uploads/{id}/choose-to-share')
+  @response(200, {
+    description: 'Array of Users that are not yet added in Share To instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(ShareTo),
+      },
+    },
+  })
+  async findUserToShare(
+    @param.path.string('id') id: string,
+  ): Promise<Users[] | void> {
+    const upload = await this.uploadsRepository.findById(id);
+    const shareTos = await this.shareToRepository.find({where: {upload: id}});
+    let userList: string[];
+    userList = shareTos.map(shareTo => shareTo.user);
+    userList = [...userList, upload.user];
+    return await this.usersRepository.find({
+      where: {_id: {nin: userList}},
+      fields: ['_id', 'fullname'],
+    });
+  }
 }
