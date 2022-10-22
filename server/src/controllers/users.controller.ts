@@ -10,13 +10,19 @@ import {
   response,
 } from '@loopback/rest';
 import {ShareTo, Users} from '../models';
-import {UsersRepository, ShareToRepository} from '../repositories';
+import {
+  UsersRepository,
+  ShareToRepository,
+  UploadsRepository,
+} from '../repositories';
 import {genSalt, hash, compare} from 'bcryptjs';
 
 export class UsersController {
   constructor(
     @repository(UsersRepository)
     public usersRepository: UsersRepository,
+    @repository(UploadsRepository)
+    public uploadsRepository: UploadsRepository,
     @repository(ShareToRepository)
     public shareToRepository: ShareToRepository,
   ) {}
@@ -118,6 +124,17 @@ export class UsersController {
     description: 'Users DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
+    await this.shareToRepository.deleteAll({user:id});
+    await this.usersRepository.userChats(id).delete();
+    await this.usersRepository
+      .userUploads(id)
+      .find()
+      .then(res => {
+        res.map(upload =>
+          this.shareToRepository.deleteAll({upload: upload._id}),
+        );
+      });
+    await this.usersRepository.userUploads(id).delete();
     await this.usersRepository.deleteById(id);
   }
 
