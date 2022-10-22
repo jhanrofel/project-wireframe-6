@@ -1,6 +1,5 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {Users} from './users.model';
-import {ShareTo} from './share-to.model';
 
 @model()
 export class Uploads extends Entity {
@@ -31,9 +30,6 @@ export class Uploads extends Entity {
 
   @belongsTo(() => Users, {name: 'uploadUser'})
   user: string;
-
-  @hasMany(() => Users, {through: {model: () => ShareTo, keyFrom: 'upload', keyTo: 'user'}})
-  uploadShareToUsers: Users[];
 
   constructor(data?: Partial<Uploads>) {
     super(data);
