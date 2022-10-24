@@ -1,9 +1,26 @@
-import React from 'react';
+import React from "react";
 
-const EmptyRow: React.FC = () => {
+type AppProps = {
+  count: number;
+  colCount: number;
+};
+
+const EmptyRow = ({ count, colCount }: AppProps) => {
+  const addRow = count > 0 ? count : 0;
+
+  const lastColumn = colCount === 3 ? <td></td> : "";
+  const className = colCount === 3 ? "td-border" : "td-border-left";
   return (
-    <div>Empty Row</div>
-  )
-}
+    <>
+      {[...Array(addRow)].map((data, i) => (
+        <tr key={i}>
+          <td></td>
+          <td className={className}>{data}</td>
+          {lastColumn}
+        </tr>
+      ))}
+    </>
+  );
+};
 
 export default EmptyRow;
