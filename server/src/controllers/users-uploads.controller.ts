@@ -2,7 +2,9 @@ import {repository} from '@loopback/repository';
 import {get, param} from '@loopback/rest';
 import {Uploads} from '../models';
 import {UsersRepository} from '../repositories';
+import {authenticate} from '@loopback/authentication';
 
+@authenticate('jwt')
 export class UsersUploadsController {
   constructor(
     @repository(UsersRepository) protected usersRepository: UsersRepository,

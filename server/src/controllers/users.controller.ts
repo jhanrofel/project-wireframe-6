@@ -16,7 +16,19 @@ import {
   UploadsRepository,
 } from '../repositories';
 import {genSalt, hash, compare} from 'bcryptjs';
+import {inject} from '@loopback/core';
+import {
+  TokenServiceBindings,
+  MyUserService,
+  UserServiceBindings,
+  UserRepository,
+} from '@loopback/authentication-jwt';
+import {TokenService} from '@loopback/authentication';
+import {SecurityBindings, UserProfile} from '@loopback/security';
+import _ from 'lodash';
+import {authenticate} from '@loopback/authentication';
 
+@authenticate('jwt')
 export class UsersController {
   constructor(
     @repository(UsersRepository)
@@ -25,8 +37,17 @@ export class UsersController {
     public uploadsRepository: UploadsRepository,
     @repository(ShareToRepository)
     public shareToRepository: ShareToRepository,
+
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
+    @inject(UserServiceBindings.USER_SERVICE)
+    public userService: MyUserService,
+    @inject(SecurityBindings.USER, {optional: true})
+    public user: UserProfile,
+    @repository(UserRepository) protected userRepository: UserRepository,
   ) {}
 
+  @authenticate.skip()
   @post('/users')
   @response(200, {
     description: 'Users model instance',
@@ -45,10 +66,15 @@ export class UsersController {
     })
     users: Omit<Users, '_id'>,
   ): Promise<Users | void> {
-    users.password = await hash(users.password, await genSalt());
+    const password = await hash(users.password, await genSalt());
+    users.password = password;
     const response = this.usersRepository
       .create(users)
       .then(res => {
+        this.userRepository.create(_.omit(users, 'password')).then((savedUser) => {
+          this.userRepository.userCredentials(savedUser.id).create({password});
+        });
+        
         res.password = '';
         return res;
       })
@@ -124,7 +150,7 @@ export class UsersController {
     description: 'Users DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.shareToRepository.deleteAll({user:id});
+    await this.shareToRepository.deleteAll({user: id});
     await this.usersRepository.userChats(id).delete();
     await this.usersRepository
       .userUploads(id)
@@ -138,6 +164,7 @@ export class UsersController {
     await this.usersRepository.deleteById(id);
   }
 
+  @authenticate.skip()
   @post('/users/login')
   @response(200, {
     description: 'Users Login',
@@ -159,7 +186,7 @@ export class UsersController {
       },
     })
     userLogin: Omit<Users, '_id'>,
-  ): Promise<Users | undefined> {
+  ): Promise<Users | undefined | string> {
     const user = await this.usersRepository.findOne({
       where: {email: userLogin.email},
     });
@@ -167,8 +194,12 @@ export class UsersController {
       if (!user) throw new Error('User not found.');
       if (!(await compare(userLogin.password, user.password)))
         throw new Error('Invalid password.');
+      const userCredentials = await this.userService.verifyCredentials(userLogin);
+      const userProfile = this.userService.convertToUserProfile(userCredentials);
+      const token = await this.jwtService.generateToken(userProfile);
+      
       user.password = '';
-      return user;
+      return token;
     } catch (error) {
       return error.message;
     }

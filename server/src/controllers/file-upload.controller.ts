@@ -13,10 +13,11 @@ import {
 } from '@loopback/rest';
 import {FILE_UPLOAD_SERVICE} from '../helpers/keys';
 import {FileUploadHandler} from '../helpers/types';
-
+import {authenticate} from '@loopback/authentication';
 /**
  * A controller to handle file uploads using multipart/form-data media type
  */
+@authenticate('jwt')
 export class FileUploadController {
   /**
    * Constructor

@@ -15,7 +15,9 @@ import {
   ShareToRepository,
   UsersRepository,
 } from '../repositories';
+import {authenticate} from '@loopback/authentication';
 
+@authenticate('jwt')
 export class UploadsController {
   constructor(
     @repository(UploadsRepository)
@@ -93,7 +95,7 @@ export class UploadsController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.uploadsRepository.deleteById(id);
-    await this.shareToRepository.deleteAll({upload:id});
+    await this.shareToRepository.deleteAll({upload: id});
   }
 
   @get('/uploads/{id}/share-tos')

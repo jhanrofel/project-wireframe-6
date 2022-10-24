@@ -10,7 +10,9 @@ import {
 } from '@loopback/rest';
 import {ShareTo} from '../models';
 import {ShareToRepository} from '../repositories';
+import {authenticate} from '@loopback/authentication';
 
+@authenticate('jwt')
 export class ShareToController {
   constructor(
     @repository(ShareToRepository)

@@ -16,12 +16,14 @@ import fs from 'fs';
 import path from 'path';
 import {promisify} from 'util';
 // import {STORAGE_DIRECTORY} from '../helpers/keys';
+import {authenticate} from '@loopback/authentication';
 
 const readdir = promisify(fs.readdir);
 
 /**
  * A controller to handle file downloads using multipart/form-data media type
  */
+@authenticate('jwt')
 export class FileDownloadController {
   // constructor(@inject(STORAGE_DIRECTORY) private storageDirectory: string) {}
   @get('/files', {
@@ -54,8 +56,8 @@ export class FileDownloadController {
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ) {
     // const file = this.validateFileName(fileName);
-    const file = './public/uploads/'+fileName;
-    response.download(file,fileName);
+    const file = './public/uploads/' + fileName;
+    response.download(file, fileName);
     return response;
   }
 
@@ -64,8 +66,8 @@ export class FileDownloadController {
    * @param fileName - File name
    */
   private validateFileName(fileName: string) {
-    const resolved = path.resolve("./public/uploads", fileName);
-    if (resolved.startsWith("./public/uploads")) return resolved;
+    const resolved = path.resolve('./public/uploads', fileName);
+    if (resolved.startsWith('./public/uploads')) return resolved;
     // The resolved file is outside sandbox
     throw new HttpErrors.BadRequest(`Invalid file name: ${fileName}`);
   }

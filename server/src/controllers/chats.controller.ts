@@ -9,7 +9,9 @@ import {
 } from '@loopback/rest';
 import {Chats} from '../models';
 import {ChatsRepository} from '../repositories';
+import {authenticate} from '@loopback/authentication';
 
+@authenticate('jwt')
 export class ChatsController {
   constructor(
     @repository(ChatsRepository)
