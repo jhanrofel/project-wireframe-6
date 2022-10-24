@@ -1,8 +1,12 @@
-import React from 'react';
+type AppProps = {
+  text: string;
+};
 
-const Subheader: React.FC = () => {
+const Subheader = ({ text }: AppProps) => {
   return (
-    <div>Subheader</div>
+    <div>
+      <h5>{text}</h5>
+    </div>
   )
 }
 

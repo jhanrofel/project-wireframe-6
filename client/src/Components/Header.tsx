@@ -1,9 +1,13 @@
-import React from 'react';
+type AppProps = {
+  text: string;
+};
 
-const Header: React.FC = () => {
+const Header = ({ text }: AppProps) => {
   return (
-    <div>Header</div>
-  )
-}
+    <div>
+      <h3>{text}</h3>
+    </div>
+  );
+};
 
 export default Header;
