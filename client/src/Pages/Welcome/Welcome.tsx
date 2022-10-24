@@ -1,22 +1,24 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 import Header from "../../Components/Header";
 import Subheader from "../../Components/Subheader";
 import Button from "../../Components/Button";
 
 const Welcome: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="main">
         <Header text="Welcome to Users Module" />
         <Subheader text="Existing Users" />
-        <Button name="login" text="Login" variant="light" link="./login" />
+        <Button name="login" text="Login" variant="light" onClick={() => navigate("./login")}/>
         <Subheader text="New Users" />
         <Button
           name="register"
           text="Register"
           variant="light"
-          link="./register"
+          onClick={() => navigate("./register")}
         />
         {/* {state && state.logout && <Logout />} */}
       </div>
