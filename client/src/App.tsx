@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Welcome from "./Pages/Welcome/Welcome";
+import Welcome from "./Pages/welcome/welcome";
 import Login from "./Pages/login/login";
 import LoginSuccessful from "./Pages/login/loginSuccessful";
 import Register from "./Pages/register/register";
@@ -9,7 +9,7 @@ import EditUser from "./Pages/User/EditUser";
 import ManageDocument from "./Pages/UploadFile/ManageDocument";
 import ShareFile from "./Pages/UploadFile/ShareFile";
 import GroupChat from "./Pages/Chat/GroupChat";
-import PageNotFound from "./Pages/PageNotFound";
+import PageNotFound from "./Pages/pageNotFound";
 import ProtectedLayout from "./Pages/Layout/ProtectedLayout";
 import PublicLayout from "./Pages/Layout/PublicLayout";
 

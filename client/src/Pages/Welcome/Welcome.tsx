@@ -4,7 +4,7 @@ import { useNavigate,useLocation } from "react-router-dom";
 import Header from "../../Components/Header";
 import Subheader from "../../Components/Subheader";
 import Button from "../../Components/Button";
-import Logout from "./Logout";
+import Logout from "./logout";
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
