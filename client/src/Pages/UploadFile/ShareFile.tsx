@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import BsButton from "react-bootstrap/Button";
 
-import TableShare from "../../Components/Table/TableShare";
-import TableTitle from "../../Components/TableTitle";
+import TableShare from "../../Components/table/tableShare";
+import TableTitle from "../../Components/tableTitle";
 
 // import { LoggedIn } from "../../Utilitites/LoggedIn";
 // import { useDispatch, useSelector } from "react-redux";

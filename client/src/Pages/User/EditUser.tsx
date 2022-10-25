@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
-import Header from "../../Components/Header";
-import Button from "../../Components/Button";
-import InputGroup from "../../Components/InputGroup";
+import Header from "../../Components/header";
+import Button from "../../Components/button";
+import InputGroup from "../../Components/inputGroup";
 
 // import { LoggedInCreate, LoggedIn } from "../../Utilitites/LoggedIn";
 // import { editUser, fetchUserOne } from "../../Utilitites/Slice/UserSlice";

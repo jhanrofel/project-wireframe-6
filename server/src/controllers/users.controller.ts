@@ -108,8 +108,9 @@ export class UsersController {
       },
     },
   })
-  async find(): Promise<Users[]> {
-    return this.usersRepository.find({fields: {password: false}});
+  async find(): Promise<apiResponse> {
+    const users:Users[] = await this.usersRepository.find({fields: {password: false}});
+    return {status: 200, users: users};
   }
 
   @get('/users/{id}')

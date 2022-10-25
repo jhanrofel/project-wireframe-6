@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Header from "../../Components/Header";
-import InputGroup from "../../Components/InputGroup";
-import Button from "../../Components/Button";
+import Header from "../../Components/header";
+import InputGroup from "../../Components/inputGroup";
+import Button from "../../Components/button";
 
 import { useAppDispatch } from "../../utilities/hooks";
 import { postUser } from "../../utilities/slice/userSlice";

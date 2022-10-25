@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
 
-import TableHeader from "../TableHeader";
-import EmptyRow from "../EmptyRow";
+import TableHeader from "../tableHeader";
+import EmptyRow from "../emptyRow";
 
 // import { ApiDownloadFile } from "../../Utilitites/Api";
 // import { LoggedIn } from "../../Utilitites/LoggedIn";

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
 
-import ConfirmModal from "../Modal/ConfirmModal";
-import TableHeader from "../TableHeader";
-import EmptyRow from "../EmptyRow";
+import ConfirmModal from "../modal/confirmModal";
+import TableHeader from "../tableHeader";
+import EmptyRow from "../emptyRow";
 import { type } from "@testing-library/user-event/dist/type";
 // import { useDispatch } from "react-redux";
 // import { deleteShare } from "../../Utilitites/Slice/ShareSlice";

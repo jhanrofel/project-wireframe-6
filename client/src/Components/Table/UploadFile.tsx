@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import BsButton from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
-import TableHeader from "../TableHeader";
-import EmptyRow from "../EmptyRow";
-import ConfirmModal from "../Modal/ConfirmModal";
-import FileEditModal from "../Modal/FileEditModal";
+import TableHeader from "../tableHeader";
+import EmptyRow from "../emptyRow";
+import ConfirmModal from "../modal/confirmModal";
+import FileEditModal from "../modal/fileEditModal";
 
 // import { ApiDownloadFile } from "../../Utilitites/Api";
 // import { useDispatch } from "react-redux";

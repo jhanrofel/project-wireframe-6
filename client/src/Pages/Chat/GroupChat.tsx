@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../Components/Button";
+import Button from "../../Components/button";
 
 // import { LoggedIn } from "../../Utilitites/LoggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";

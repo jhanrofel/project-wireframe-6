@@ -1,9 +1,9 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 
-import Header from "../../Components/Header";
-import Subheader from "../../Components/Subheader";
-import Button from "../../Components/Button";
+import Header from "../../Components/header";
+import Subheader from "../../Components/subheader";
+import Button from "../../Components/button";
 
 const RegisterSuccessful: React.FC = () => {
   const navigate = useNavigate();

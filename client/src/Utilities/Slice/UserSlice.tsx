@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import AuthToken from "../authentication";
+import {IsLogged} from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -51,10 +53,26 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
+  return await axios({
+    url: `/users`,
+    method: "get",
+    headers: {
+      Authorization: AuthToken(),
+    },
+  })
+    .then((res) => {
+      if (res.data.status === 200) {
+        return res.data;
+      }
+    })
+    .catch((err) => err);
+});
+
 interface UsersOneState {
-  id?: string;
-  fullname?: string;
-  email?: string;
+  id: string;
+  fullname: string;
+  email: string;
 }
 
 interface UsersState {
@@ -66,7 +84,7 @@ interface UsersState {
 }
 
 const initialState = {
-  logged: false,
+  logged: IsLogged() ? true : false,
   data: [{}],
   dataOne: {},
   loading: "idle",
@@ -79,7 +97,7 @@ export const userSlice = createSlice({
     clearUser: (state) => {
       state.logged = false;
       state.data = [];
-      state.dataOne = {};
+      state.dataOne = { id: "", fullname: "", email: "" };
       state.message = "";
     },
   },
@@ -95,6 +113,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state) => {
       state.logged = false;
+    });
+    builder.addCase(fetchUsers.fulfilled, (state, action) => {
+      state.data = action.payload.users;
     });
   },
 });

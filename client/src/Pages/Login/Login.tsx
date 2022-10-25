@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../Components/Header";
-import Button from "../../Components/Button";
-import InputGroup from "../../Components/InputGroup";
+import Header from "../../Components/header";
+import Button from "../../Components/button";
+import InputGroup from "../../Components/inputGroup";
 import { CookiesCreate } from "../../utilities/cookies";
 import { LoggedInCreate } from "../../utilities/loggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";

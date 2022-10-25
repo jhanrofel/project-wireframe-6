@@ -1,13 +1,11 @@
-import React from "react";
-
-import TableUser from "../../Components/Table/User";
-import TableTitle from "../../Components/TableTitle";
-
-// import { useDispatch,useSelector } from "react-redux";
-// import { fetchUsers } from "../../Utilitites/Slice/UserSlice";
+import React,{useEffect} from "react";
+import TableUser from "../../Components/table/userTable";
+import TableTitle from "../../Components/tableTitle";
+import { useAppDispatch } from "../../utilities/hooks";
+import { fetchUsers } from "../../utilities/slice/userSlice";
 
 const ManageDocument: React.FC = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const users = {
     name: "users",
@@ -19,11 +17,10 @@ const ManageDocument: React.FC = () => {
     minRows: 10,
     numCols: 3,
   };
-  // const lists = useSelector((state) => state.user.data);
 
-  // useEffect(() => {
-  //   dispatch(fetchUsers());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
   return (
     <>
       <TableTitle text="Users" />

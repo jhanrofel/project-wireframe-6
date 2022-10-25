@@ -2,14 +2,11 @@ import React, { ElementRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
-
-import ConfirmModal from "../Modal/ConfirmModal";
-import TableHeader from "../TableHeader";
-import EmptyRow from "../EmptyRow";
-
-// import { ApiDeleteUser } from "../../Utilitites/Api";
-// import { LoggedIn } from "../../Utilitites/LoggedIn";
-// import { useDispatch, useSelector } from "react-redux";
+import ConfirmModal from "../modal/confirmModal";
+import TableHeader from "../tableHeader";
+import EmptyRow from "../emptyRow";
+import { LoggedIn } from "../../utilities/loggedIn";
+import { useAppDispatch,useAppSelector } from "../../utilities/hooks"
 // import { deleteUser } from "../../Utilitites/Slice/UserSlice";
 
 type AppProps = {
@@ -24,14 +21,19 @@ type AppProps = {
   };
 };
 
-const User = ({ data }: AppProps) => {
-  // const dispatch = useDispatch();
-  // const loggedIn = LoggedIn();
+interface UsersOneState {
+  id: string;
+  fullname: string;
+  email: string;
+}
+
+const UserTable = ({ data }: AppProps) => {
+  const dispatch = useAppDispatch();
+  const loggedIn = LoggedIn();
   const navigate = useNavigate();
-  // const lists = useSelector((state) => state.user.data);
-  const lists: string[] = [];
-  const [deleteUserId, setDeleteUserId] = useState("");
-  const [userDeleted, setUserDeleted] = useState("");
+  const lists:UsersOneState[] = useAppSelector((state) => state.users.data);
+  const [deleteUserId, setDeleteUserId] = useState<string>("");
+  const [userDeleted, setUserDeleted] = useState<string>("");
   const [show, setShow] = useState(false);
   const handleClose = ():void => setShow(false);
   const modalData = {
@@ -42,10 +44,10 @@ const User = ({ data }: AppProps) => {
     cancelValue: "Cancel",
   };
 
-  const [users, setUsers] = useState([]);
-  // useEffect(() => {
-  //   setUsers(lists);
-  // }, [lists,userDeleted]);
+  const [users, setUsers] = useState<UsersOneState[]>(lists);
+  useEffect(() => {
+    setUsers(lists);
+  }, [lists,userDeleted]);
 
   const editAction = (id: string) => {
     return (
@@ -90,21 +92,22 @@ const User = ({ data }: AppProps) => {
     //   setShow(false);
     // });
   };
+  
   return (
     <div className="table-container">
       <Table striped>
         <TableHeader headers={data.headers} />
         <tbody>
-          {users.map((user, i) => (
+          {users.map((user:UsersOneState, i) => (
             <tr key={i}>
-              {/* <td className="td-left">{user.fullname}</td>
+              <td className="td-left">{user.fullname}</td>
               <td className="td-border">{user.email}</td>
               <td>
-                {editAction(user._id)}|
-                {loggedIn.userId !== user._id
-                  ? deleteAction(user._id)
+                {editAction(user.id)}|
+                {loggedIn.id !== user.id
+                  ? deleteAction(user.id)
                   : deleteDisable()}
-              </td> */}
+              </td>
             </tr>
           ))}
           <EmptyRow
@@ -123,4 +126,4 @@ const User = ({ data }: AppProps) => {
   );
 };
 
-export default User;
+export default UserTable;

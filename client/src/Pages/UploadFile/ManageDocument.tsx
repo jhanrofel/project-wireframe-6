@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import TableUploadFile from "../../Components/Table/UploadFile";
-import ShareUpload from "../../Components/Table/ShareUpload";
-import TableTitle from "../../Components/TableTitle";
-import Button from "../../Components/Button";
-import UploadModal from "../../Components/Modal/UploadModal";
+import TableUploadFile from "../../Components/table/uploadFile";
+import ShareUpload from "../../Components/table/shareUpload";
+import TableTitle from "../../Components/tableTitle";
+import Button from "../../Components/button";
+import UploadModal from "../../Components/modal/uploadModal";
 
 // import { LoggedIn } from "../../Utilitites/LoggedIn";
 // import { useDispatch,useSelector } from "react-redux";
