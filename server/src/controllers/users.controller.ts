@@ -71,21 +71,13 @@ export class UsersController {
     const response = this.usersRepository
       .create(users)
       .then(res => {
-        // this.userRepository.create(_.omit(users, 'password')).then((savedUser) => {
-        //   this.userRepository.userCredentials(savedUser.id).create({password});
-        // });
-
         this.usersRepository.userCredentials(res.id).create({password});
-        
+
         res.password = '';
         return res;
       })
       .catch(err => {
-        if (err.code == 11000) {
-          return `${err.keyValue.email} email already exist.`;
-        } else {
-          return err;
-        }
+        return err;
       });
 
     return response;
@@ -196,10 +188,13 @@ export class UsersController {
       if (!user) throw new Error('User not found.');
       if (!(await compare(userLogin.password, user.password)))
         throw new Error('Invalid password.');
-      const userCredentials = await this.userService.verifyCredentials(userLogin);
-      const userProfile = this.userService.convertToUserProfile(userCredentials);
+      const userCredentials = await this.userService.verifyCredentials(
+        userLogin,
+      );
+      const userProfile =
+        this.userService.convertToUserProfile(userCredentials);
       const token = await this.jwtService.generateToken(userProfile);
-      
+
       user.password = '';
       return token;
     } catch (error) {

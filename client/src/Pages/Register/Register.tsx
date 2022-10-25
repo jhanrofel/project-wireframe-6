@@ -5,8 +5,11 @@ import Header from "../../Components/Header";
 import InputGroup from "../../Components/InputGroup";
 import Button from "../../Components/Button";
 
+import { useAppDispatch } from "../../Utilities/hooks";
+import { postUser } from "../../Utilities/Slice/UserSlice";
+
 const Register: React.FC = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     fullname: "",
@@ -86,14 +89,25 @@ const Register: React.FC = () => {
         alert("Confirm password does not match.");
         return;
       } else {
-        navigate("/register-success");
-        // await dispatch(postUser(formValues)).then((res) => {
-        //   if (!res.error) {
-        //     navigate("/register-success");
-        //   } else {
-        //     alert(res.payload);
-        //   }
-        // });
+        interface postValue {
+          fullname: string;
+          email: string;
+          password: string;
+        }
+
+        const postUserValue: postValue = {
+          fullname: formValues.fullname,
+          email: formValues.email,
+          password: formValues.password,
+        };
+
+        await dispatch(postUser(postUserValue)).then((res) => {
+          if (res.type === 'users/postUser/fulfilled') {
+            navigate("/register-success");
+          } else {
+            alert(res.payload);
+          }
+        });
       }
     }
   };
