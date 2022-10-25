@@ -80,14 +80,17 @@ export class UsersController {
       .then(res => {
         this.usersRepository.userCredentials(res.id).create({password});
         res.password = '';
-        return {status:200,users:[res]};
+        return {status: 200, users: [res]};
       })
       .catch(err => {
-        if (err.code === 11000) {            
-          return {status:500,error:`${err.keyValue.email} email already exist.`};
+        if (err.code === 11000) {
+          return {
+            status: 500,
+            error: `${err.keyValue.email} email already exist.`,
+          };
         } else {
-          return {status:500,error:err.message};
-        }        
+          return {status: 500, error: err.message};
+        }
       });
 
     return response;
@@ -204,10 +207,11 @@ export class UsersController {
       const userProfile =
         this.userService.convertToUserProfile(userCredentials);
       const token = await this.jwtService.generateToken(userProfile);
+      user.password = '';
 
-      return {status:200,message:token};
+      return {status: 200, message: token, users: [user]};
     } catch (err) {
-      return {status:500,error:err.message};
+      return {status: 500, error: err.message};
     }
   }
 

@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Header from "../../Components/Header";
 import Button from "../../Components/Button";
 import InputGroup from "../../Components/InputGroup";
-
 import { CookiesCreate } from "../../utilities/cookies";
-// import { LoggedInCreate } from "../../Utilitites/LoggedIn";
-
+import { LoggedInCreate } from "../../utilities/loggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";
-
 import { useAppDispatch } from "../../utilities/hooks";
 import { loginUser } from "../../utilities/slice/userSlice";
 
@@ -70,7 +66,8 @@ const Login: React.FC = () => {
     if (formValues.email !== "" && formValues.password !== "") {
       await dispatch(loginUser(postValue)).then((res) => {
         if (res.type === 'users/loginUser/fulfilled') {
-          CookiesCreate(res.payload);
+          CookiesCreate(res.payload.message);
+          LoggedInCreate(res.payload.users[0]);
           navigate("/login-success");
         } else {
           alert(res.payload);

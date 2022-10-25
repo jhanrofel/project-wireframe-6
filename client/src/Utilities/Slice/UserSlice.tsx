@@ -42,7 +42,7 @@ export const loginUser = createAsyncThunk(
     })
       .then((res) => {
         if (res.data.status === 200) {
-          return res.data.message;
+          return res.data;
         } else {
           return rejectWithValue(res.data.error);
         }
