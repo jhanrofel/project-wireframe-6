@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AuthToken from "../authentication";
-import {IsLogged} from "../loggedIn";
+import { IsLogged } from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -69,6 +69,23 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
     .catch((err) => err);
 });
 
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async (userId: string) => {
+    return await axios({
+      url: `/users/${userId}`,
+      method: "delete",
+      headers: {
+        Authorization: AuthToken(),
+      },
+    })
+      .then(() => {
+        return userId;
+      })
+      .catch((err) => err);
+  }
+);
+
 interface UsersOneState {
   id: string;
   fullname: string;
@@ -116,6 +133,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.data = action.payload.users;
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.data = state.data.filter((user) => user.id !== action.payload);
     });
   },
 });

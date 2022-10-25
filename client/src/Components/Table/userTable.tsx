@@ -7,7 +7,7 @@ import TableHeader from "../tableHeader";
 import EmptyRow from "../emptyRow";
 import { LoggedIn } from "../../utilities/loggedIn";
 import { useAppDispatch,useAppSelector } from "../../utilities/hooks"
-// import { deleteUser } from "../../Utilitites/Slice/UserSlice";
+import { deleteUser } from "../../utilities/slice/userSlice";
 
 type AppProps = {
   data: {
@@ -87,10 +87,10 @@ const UserTable = ({ data }: AppProps) => {
   };
 
   const onDeleteHandler = (): void => {
-    // dispatch(deleteUser(deleteUserId)).then(() => {
-    //   setUserDeleted(deleteUserId);
-    //   setShow(false);
-    // });
+    dispatch(deleteUser(deleteUserId)).then(() => {
+      setUserDeleted(deleteUserId);
+      setShow(false);
+    });
   };
   
   return (
