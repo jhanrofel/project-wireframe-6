@@ -1,8 +1,12 @@
-import {CookiesToken} from "./cookies";
+import { CookiesToken, CookiesRemove } from "./cookies";
+import { LoggedInRemove } from "./loggedIn";
 
-const AuthToken = () => {
+export const AuthToken = (): string => {
   const token = CookiesToken();
   return `Bearer ${token}`;
 };
 
-export default AuthToken;
+export const Unauthorize = () => {
+  LoggedInRemove();
+  CookiesRemove();
+};

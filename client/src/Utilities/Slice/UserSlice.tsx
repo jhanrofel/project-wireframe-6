@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import AuthToken from "../authentication";
+import { AuthToken, Unauthorize } from "../authentication";
 import { IsLogged } from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
@@ -19,7 +19,6 @@ export const postUser = createAsyncThunk(
       data: formValues,
     })
       .then((res) => {
-        console.log(res);
         if (res.data.status === 200) {
           return;
         } else {
@@ -67,7 +66,10 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
         return res.data;
       }
     })
-    .catch((err) => err);
+    .catch((error) => {
+      if (error.response.data.error.name === "UnauthorizedError") Unauthorize();
+      return error;
+    });
 });
 
 export const fetchUserOne = createAsyncThunk(
@@ -81,7 +83,10 @@ export const fetchUserOne = createAsyncThunk(
       },
     })
       .then((res) => res.data)
-      .catch((err) => err);
+      .catch((error) => {
+        if (error.response.data.error.name === "UnauthorizedError") Unauthorize();
+        return error;
+      });
   }
 );
 
@@ -97,7 +102,7 @@ interface EditUserValues {
 
 export const editUser = createAsyncThunk(
   "users/editUser",
-  async (data:EditUserValues, { rejectWithValue }) => {
+  async (data: EditUserValues, { rejectWithValue }) => {
     const { userId, formValues } = data;
     return await axios({
       url: `/users/${userId}`,
@@ -107,14 +112,14 @@ export const editUser = createAsyncThunk(
         Authorization: AuthToken(),
       },
     })
-    .then((res) => {
-      if (res.data.status === 200) {
-        return res.data.users;
-      } else {
-        return rejectWithValue(res.data.error);
-      }
-    })
-    .catch((err) => err);
+      .then((res) => {
+        if (res.data.status === 200) {
+          return res.data.users;
+        } else {
+          return rejectWithValue(res.data.error);
+        }
+      })
+      .catch((err) => err);
   }
 );
 
