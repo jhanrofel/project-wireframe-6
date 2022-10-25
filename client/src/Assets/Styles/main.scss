@@ -51,9 +51,6 @@ body {
 
 .table tr {
   font-size: 13px;
-}
-
-.table tr {
   height: 35px;
 }
 
@@ -385,7 +382,7 @@ p {
 
 .choose-body select {
   appearance: none;
-  background-image: url("../Images/select-arrow.png");
+  background-image: url("../images/selectArrow.png");
   background-repeat: no-repeat;
   background-position: calc(100% - 3px) center;
   background-size: 30px;

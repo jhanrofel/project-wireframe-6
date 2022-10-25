@@ -1,4 +1,4 @@
-import { CookiesToken } from "./Cookies";
+import { CookiesToken } from "./cookies";
 
 interface userLoggedIn {
   _id: string;

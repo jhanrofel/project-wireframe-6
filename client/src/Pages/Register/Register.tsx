@@ -5,8 +5,8 @@ import Header from "../../Components/Header";
 import InputGroup from "../../Components/InputGroup";
 import Button from "../../Components/Button";
 
-import { useAppDispatch } from "../../Utilities/hooks";
-import { postUser } from "../../Utilities/Slice/UserSlice";
+import { useAppDispatch } from "../../utilities/hooks";
+import { postUser } from "../../utilities/slice/userSlice";
 
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();

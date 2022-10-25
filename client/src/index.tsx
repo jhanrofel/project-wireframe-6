@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom/client';
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Assets/Styles/main.scss";
+import "./assets/styles/main.scss";
 import App from './App';
-import { store } from "./Utilities/Store";
+import { store } from "./utilities/store";
 import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(

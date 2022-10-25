@@ -2,14 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
-interface LoginValues {
-  fullname: string;
-  email: string;
-  password: string;
-}
-
-interface UserValues {
-  id: string;
+interface RegisterValues {
   fullname: string;
   email: string;
   password: string;
@@ -17,7 +10,7 @@ interface UserValues {
 
 export const postUser = createAsyncThunk(
   "users/postUser",
-  async (formValues: LoginValues, { rejectWithValue }) => {
+  async (formValues: RegisterValues, { rejectWithValue }) => {
     return await axios({
       url: `http://localhost:3001/users`,
       method: "post",
@@ -70,7 +63,6 @@ export const userSlice = createSlice({
       state.data = [...state.data, action.payload.data];
     });
     builder.addCase(postUser.rejected, (state, action) => {
-      console.log(action.payload);
       state.message = "error";
     });
   },
