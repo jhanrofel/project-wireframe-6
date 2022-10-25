@@ -1,6 +1,7 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
 import {Chats} from './chats.model';
 import {Uploads} from './uploads.model';
+import {UserCredentials} from './user-credentials.model';
 
 @model()
 export class Users extends Entity {
@@ -9,7 +10,7 @@ export class Users extends Entity {
     id: true,
     generated: true,
   })
-  _id?: string;
+  id: string;
 
   @property({
     type: 'string',
@@ -35,6 +36,9 @@ export class Users extends Entity {
 
   @hasMany(() => Uploads, {keyTo: 'user'})
   userUploads: Uploads[];
+
+  @hasOne(() => UserCredentials, {keyTo: 'userId'})
+  userCredentials: UserCredentials;
 
   constructor(data?: Partial<Users>) {
     super(data);

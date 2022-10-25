@@ -134,8 +134,8 @@ export class UploadsController {
     userList = shareTos.map(shareTo => shareTo.user);
     userList = [...userList, upload.user];
     return await this.usersRepository.find({
-      where: {_id: {nin: userList}},
-      fields: ['_id', 'fullname'],
+      where: {id: {nin: userList}},
+      fields: ['id', 'fullname'],
     });
   }
 }

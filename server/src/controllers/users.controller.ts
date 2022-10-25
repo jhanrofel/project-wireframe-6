@@ -59,7 +59,7 @@ export class UsersController {
         'application/json': {
           schema: getModelSchemaRef(Users, {
             title: 'NewUsers',
-            exclude: ['_id'],
+            exclude: ['id'],
           }),
         },
       },
@@ -71,9 +71,11 @@ export class UsersController {
     const response = this.usersRepository
       .create(users)
       .then(res => {
-        this.userRepository.create(_.omit(users, 'password')).then((savedUser) => {
-          this.userRepository.userCredentials(savedUser.id).create({password});
-        });
+        // this.userRepository.create(_.omit(users, 'password')).then((savedUser) => {
+        //   this.userRepository.userCredentials(savedUser.id).create({password});
+        // });
+
+        this.usersRepository.userCredentials(res.id).create({password});
         
         res.password = '';
         return res;
@@ -125,7 +127,7 @@ export class UsersController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Users, {exclude: ['_id', 'password']}),
+          schema: getModelSchemaRef(Users, {exclude: ['id', 'password']}),
         },
       },
     })
@@ -180,7 +182,7 @@ export class UsersController {
         'application/json': {
           schema: getModelSchemaRef(Users, {
             title: 'Login',
-            exclude: ['_id', 'fullname'],
+            exclude: ['id', 'fullname'],
           }),
         },
       },

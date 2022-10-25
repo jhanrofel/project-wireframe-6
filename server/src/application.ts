@@ -13,9 +13,12 @@ import {MySequence} from './sequence';
 import {AuthenticationComponent} from '@loopback/authentication';
 import {
   JWTAuthenticationComponent,
+  UserRepository,
   UserServiceBindings,
 } from '@loopback/authentication-jwt';
 import {MongoDbDataSource} from './datasources/mongo-db.datasource';
+import {CustomUserService} from './services/user.service';
+import {UsersRepository, UserCredentialsRepository} from './repositories';
 
 export {ApplicationConfig};
 
@@ -53,6 +56,14 @@ export class LoopbackServerApplication extends BootMixin(
     this.component(JWTAuthenticationComponent);
     // Bind datasource
     this.dataSource(MongoDbDataSource, UserServiceBindings.DATASOURCE_NAME);
-    
+    // Bind user service
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(CustomUserService),
+    // Bind user and credentials repository
+    this.bind(UserServiceBindings.USER_REPOSITORY).toClass(
+      UserRepository,
+    ),
+    this.bind(UserServiceBindings.USER_CREDENTIALS_REPOSITORY).toClass(
+      UserCredentialsRepository,
+    )
   }
 }
