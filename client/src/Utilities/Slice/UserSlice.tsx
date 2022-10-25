@@ -52,9 +52,9 @@ export const loginUser = createAsyncThunk(
 );
 
 interface UsersOneState {
-  id: string;
-  fullname: string;
-  email: string;
+  id?: string;
+  fullname?: string;
+  email?: string;
 }
 
 interface UsersState {
@@ -77,8 +77,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     clearUser: (state) => {
+      state.logged = false;
       state.data = [];
-      state.dataOne = { id: "", fullname: "", email: "" };
+      state.dataOne = {};
       state.message = "";
     },
   },
@@ -86,7 +87,7 @@ export const userSlice = createSlice({
     builder.addCase(postUser.fulfilled, (state, action) => {
       state.data = [...state.data, action.payload.data];
     });
-    builder.addCase(postUser.rejected, (state, action) => {
+    builder.addCase(postUser.rejected, (state) => {
       state.message = "error";
     });
     builder.addCase(loginUser.fulfilled, (state) => {

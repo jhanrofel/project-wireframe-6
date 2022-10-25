@@ -1,20 +1,15 @@
-import { Outlet } from "react-router-dom";
-// import { IsLogged } from "../../Utilitites/LoggedIn";
-import NavBar from "./Navbar";
+import { Navigate, Outlet } from "react-router-dom";
+import { IsLogged } from "../../utilities/loggedIn";
+import NavBar from "./navigationBar";
 
 const ProtectedLayout: React.FC = () => {
-  return (
+  return IsLogged() ? (
     <>
       <NavBar /> <Outlet />
     </>
+  ) : (
+    <Navigate to="/login" replace />
   );
-  // return IsLogged() ? (
-  // <>
-  //     <NavBar /> <Outlet />
-  // </>
-  // ) : (
-  // <Navigate to="/login" replace />
-  // );
 };
 
 export default ProtectedLayout;

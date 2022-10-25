@@ -1,28 +1,27 @@
 import React from "react";
-// import { useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
-
-// import { CookiesRemove } from "../../Utilitites/Cookies";
-// import { LoggedInRemove, LoggedIn } from "../../Utilitites/LoggedIn";
+import { useAppDispatch } from "../../utilities/hooks";
+import { CookiesRemove } from "../../utilities/cookies";
+import { LoggedInRemove, LoggedIn } from "../../utilities/loggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";
-// import { clearUser } from "../../Utilitites/Slice/UserSlice";
+import { clearUser } from "../../utilities/slice/userSlice";
 // import { clearChat } from "../../Utilitites/Slice/ChatSlice";
 // import { clearUpload } from "../../Utilitites/Slice/UploadSlice";
 // import { clearShare } from "../../Utilitites/Slice/ShareSlice";
 
 const Navbar: React.FC = () => {
-  // const dispatch = useDispatch();
-  // const loggedIn = LoggedIn();
+  const dispatch = useAppDispatch();
+  const loggedIn = LoggedIn();
   // const socket = SocketConnect();
   const pathname = useLocation().pathname;
 
   const onLogout = async () => {
-    //   dispatch(clearUser());
+    dispatch(clearUser());
     //   dispatch(clearChat());
     //   dispatch(clearUpload());
     //   dispatch(clearShare());
-    //   LoggedInRemove();
-    //   CookiesRemove();
+    LoggedInRemove();
+    CookiesRemove();
     //   socket.emit("send_message", {
     //     message: {
     //       userId: { fullname: loggedIn.fullname },
@@ -50,7 +49,9 @@ const Navbar: React.FC = () => {
         </NavLink>
         <NavLink
           to="/doc-list"
-          className={({ isActive }) => (isActive || pathname === "/share" ? "nav-selected" : "nav-link")}
+          className={({ isActive }) =>
+            isActive || pathname === "/share" ? "nav-selected" : "nav-link"
+          }
         >
           Manage Documents
         </NavLink>

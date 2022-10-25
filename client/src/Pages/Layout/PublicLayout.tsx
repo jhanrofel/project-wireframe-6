@@ -1,11 +1,8 @@
-import { Outlet } from "react-router-dom";
-// import { IsLogged } from "../../Utilitites/LoggedIn";
+import { Navigate, Outlet } from "react-router-dom";
+import { IsLogged } from "../../utilities/loggedIn";
 
 const PublicLayout = () => {
-  return (
-    <Outlet />
-  )
-//   return IsLogged() ? <Navigate to="/users-list" replace /> : <Outlet />;
-}
+  return IsLogged() ? <Navigate to="/users-list" replace /> : <Outlet />;
+};
 
-export default PublicLayout
+export default PublicLayout;

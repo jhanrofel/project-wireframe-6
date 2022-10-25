@@ -10,8 +10,8 @@ import ManageDocument from "./Pages/UploadFile/ManageDocument";
 import ShareFile from "./Pages/UploadFile/ShareFile";
 import GroupChat from "./Pages/Chat/GroupChat";
 import PageNotFound from "./Pages/pageNotFound";
-import ProtectedLayout from "./Pages/Layout/ProtectedLayout";
-import PublicLayout from "./Pages/Layout/PublicLayout";
+import ProtectedLayout from "./Pages/layout/protectedLayout";
+import PublicLayout from "./Pages/layout/publicLayout";
 
 function App() {
   return (
