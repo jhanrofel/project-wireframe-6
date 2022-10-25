@@ -104,7 +104,7 @@ const UserTable = ({ data }: AppProps) => {
               <td className="td-border">{user.email}</td>
               <td>
                 {editAction(user.id)}|
-                {loggedIn.id !== user.id
+                {loggedIn.userId !== user.id
                   ? deleteAction(user.id)
                   : deleteDisable()}
               </td>

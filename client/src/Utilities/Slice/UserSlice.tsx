@@ -19,8 +19,9 @@ export const postUser = createAsyncThunk(
       data: formValues,
     })
       .then((res) => {
+        console.log(res);
         if (res.data.status === 200) {
-          return res.data.users;
+          return;
         } else {
           return rejectWithValue(res.data.error);
         }
@@ -68,6 +69,54 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
     })
     .catch((err) => err);
 });
+
+export const fetchUserOne = createAsyncThunk(
+  "users/fetchUserOne",
+  async (userId: string) => {
+    return await axios({
+      url: `/users/${userId}`,
+      method: "get",
+      headers: {
+        Authorization: AuthToken(),
+      },
+    })
+      .then((res) => res.data)
+      .catch((err) => err);
+  }
+);
+
+interface EditFormValues {
+  fullname: string;
+  email: string;
+}
+
+interface EditUserValues {
+  userId: string;
+  formValues: EditFormValues;
+}
+
+export const editUser = createAsyncThunk(
+  "users/editUser",
+  async (data:EditUserValues, { rejectWithValue }) => {
+    const { userId, formValues } = data;
+    return await axios({
+      url: `/users/${userId}`,
+      method: "patch",
+      data: formValues,
+      headers: {
+        Authorization: AuthToken(),
+      },
+    })
+    .then((res) => {
+      if (res.data.status === 200) {
+        return res.data.users;
+      } else {
+        return rejectWithValue(res.data.error);
+      }
+    })
+    .catch((err) => err);
+  }
+);
 
 export const deleteUser = createAsyncThunk(
   "users/deleteUser",
@@ -136,6 +185,15 @@ export const userSlice = createSlice({
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.data = state.data.filter((user) => user.id !== action.payload);
+    });
+    builder.addCase(fetchUserOne.fulfilled, (state, action) => {
+      state.dataOne = action.payload;
+    });
+    builder.addCase(editUser.fulfilled, (state, action) => {
+      state.dataOne = { id: "", fullname: "", email: "" };
+    });
+    builder.addCase(editUser.rejected, (state) => {
+      state.message = "error";
     });
   },
 });

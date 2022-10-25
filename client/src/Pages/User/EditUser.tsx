@@ -1,48 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-
 import Header from "../../Components/header";
 import Button from "../../Components/button";
 import InputGroup from "../../Components/inputGroup";
-
-// import { LoggedInCreate, LoggedIn } from "../../Utilitites/LoggedIn";
-// import { editUser, fetchUserOne } from "../../Utilitites/Slice/UserSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
+import { LoggedInCreate, LoggedIn } from "../../utilities/loggedIn";
+import { fetchUserOne, editUser } from "../../utilities/slice/userSlice";
 const EditUser: React.FC = () => {
-  // const loggedIn = LoggedIn();
+  const loggedIn = LoggedIn();
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { state } = useLocation();
   const userId = state;
 
-  // const user = useSelector((state) => state.user.dataOne);
-
-  // const [formValues, setFormValues] = useState({
-  //   fullname: user.fullname || "",
-  //   email: user.email || "",
-  // });
-
+  const user = useAppSelector((state) => state.users.dataOne);
   const [formValues, setFormValues] = useState({
-    fullname: "",
-    email: "",
+    fullname: user.fullname || "",
+    email: user.email || "",
   });
   const [formErrors, setFormErrors] = useState({
     fullname: "",
     email: "",
-    form: "",
   });
 
-  // useEffect(() => {
-  //   dispatch(fetchUserOne(userId));
-  // }, [dispatch, userId]);
+  useEffect(() => {
+    dispatch(fetchUserOne(userId));
+  }, [dispatch, userId]);
 
-  // useEffect(() => {
-  //   setFormValues((state) => ({
-  //     ...state,
-  //     fullname: user.fullname || "",
-  //     email: user.email || "",
-  //   }));
-  // }, [user]);
+  useEffect(() => {
+    setFormValues((state) => ({
+      ...state,
+      fullname: user.fullname || "",
+      email: user.email || "",
+    }));
+  }, [user]);
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     let name = (event.target as HTMLInputElement).name;
@@ -62,7 +53,7 @@ const EditUser: React.FC = () => {
     }
   };
 
-  const onSaveSubmitHandler = async () => {  
+  const onSaveSubmitHandler = async () => {
     if (formValues.fullname === "")
       setFormErrors((state) => ({
         ...state,
@@ -75,16 +66,17 @@ const EditUser: React.FC = () => {
       }));
 
     if (formValues.fullname !== "" && formValues.email !== "") {
-      navigate("/users-list");
-      // await dispatch(editUser({ userId, formValues })).then((res) => {
-      //   if (!res.error) {
-      //     if (userId === loggedIn.userId)
-      //       LoggedInCreate({ ...formValues, _id: userId });
-      //     navigate("/users-list");
-      //   } else {
-      //     alert(res.payload);
-      //   }
-      // });
+      await dispatch(editUser({ userId, formValues })).then((res) => {
+        if (res.type === 'users/editUser/fulfilled') {
+          if (userId === loggedIn.userId)
+            LoggedInCreate({ ...formValues, userId: userId });
+
+          console.log(userId,loggedIn.userId);
+          navigate("/users-list");
+        } else {
+          alert(res.payload);
+        }
+      });
     }
   };
 

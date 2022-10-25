@@ -31,7 +31,7 @@ import {authenticate} from '@loopback/authentication';
 interface apiResponse {
   status: number;
   message?: string;
-  users?: Users[];
+  users?: Users[]|void[];
   error?: string;
 }
 
@@ -138,15 +138,20 @@ export class UsersController {
       },
     })
     users: Omit<Users, '_id,password'>,
-  ): Promise<void> {
+  ): Promise<apiResponse> {
     const response = this.usersRepository
       .updateById(id, users)
-      .then()
+      .then((res) => {
+        return {status: 200, users: [res]};
+      })
       .catch(err => {
-        if (err.code == 11000) {
-          return `${err.keyValue.email} email already exist.`;
+        if (err.code === 11000) {
+          return {
+            status: 500,
+            error: `${err.keyValue.email} email already exist.`,
+          };
         } else {
-          return err;
+          return {status: 500, error: err.message};
         }
       });
 
