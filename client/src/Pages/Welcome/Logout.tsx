@@ -1,9 +1,9 @@
 import React from 'react';
 
+import Subheader from "../../Components/Subheader";
+
 const Logout: React.FC = () => {
-  return (
-    <div>Logout</div>
-  )
+  return <Subheader text={"You have been logged out"} />;
 }
 
 export default Logout;

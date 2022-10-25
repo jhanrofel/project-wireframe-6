@@ -1,12 +1,14 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 
 import Header from "../../Components/Header";
 import Subheader from "../../Components/Subheader";
 import Button from "../../Components/Button";
+import Logout from "./Logout";
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   return (
     <div>
       <div className="main">
@@ -20,7 +22,7 @@ const Welcome: React.FC = () => {
           variant="light"
           onClick={() => navigate("./register")}
         />
-        {/* {state && state.logout && <Logout />} */}
+        {state && state.logout && <Logout />}
       </div>
     </div>
   )
