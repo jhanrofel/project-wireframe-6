@@ -12,17 +12,39 @@ export const postUser = createAsyncThunk(
   "users/postUser",
   async (formValues: RegisterValues, { rejectWithValue }) => {
     return await axios({
-      url: `http://localhost:3001/users`,
+      url: `/users`,
       method: "post",
       data: formValues,
     })
       .then((res) => {
-        if (res.data.code === 11000) {
-          return rejectWithValue(
-            `${res.data.keyValue.email} email already exist.`
-          );
+        if (res.data.status === 200) {
+          return res.data.users;
         } else {
-          return res.data;
+          return rejectWithValue(res.data.error);
+        }
+      })
+      .catch((err) => err);
+  }
+);
+
+interface LoginValues {
+  email: string;
+  password: string;
+}
+
+export const loginUser = createAsyncThunk(
+  "users/loginUser",
+  async (formValues: LoginValues, { rejectWithValue }) => {
+    return await axios({
+      url: `/users/login`,
+      method: "post",
+      data: formValues,
+    })
+      .then((res) => {
+        if (res.data.status === 200) {
+          return res.data.message;
+        } else {
+          return rejectWithValue(res.data.error);
         }
       })
       .catch((err) => err);
@@ -36,6 +58,7 @@ interface UsersOneState {
 }
 
 interface UsersState {
+  logged: boolean;
   data: UsersOneState[];
   dataOne: UsersOneState;
   loading: "idle" | "pending" | "succeeded" | "failed";
@@ -43,6 +66,7 @@ interface UsersState {
 }
 
 const initialState = {
+  logged: false,
   data: [{}],
   dataOne: {},
   loading: "idle",
@@ -64,6 +88,12 @@ export const userSlice = createSlice({
     });
     builder.addCase(postUser.rejected, (state, action) => {
       state.message = "error";
+    });
+    builder.addCase(loginUser.fulfilled, (state) => {
+      state.logged = true;
+    });
+    builder.addCase(loginUser.rejected, (state) => {
+      state.logged = false;
     });
   },
 });

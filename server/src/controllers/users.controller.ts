@@ -28,6 +28,13 @@ import {SecurityBindings, UserProfile} from '@loopback/security';
 import _ from 'lodash';
 import {authenticate} from '@loopback/authentication';
 
+interface apiResponse {
+  status: number;
+  message?: string;
+  users?: Users[];
+  error?: string;
+}
+
 @authenticate('jwt')
 export class UsersController {
   constructor(
@@ -65,19 +72,22 @@ export class UsersController {
       },
     })
     users: Omit<Users, '_id'>,
-  ): Promise<Users | void> {
+  ): Promise<apiResponse> {
     const password = await hash(users.password, await genSalt());
     users.password = password;
     const response = this.usersRepository
       .create(users)
       .then(res => {
         this.usersRepository.userCredentials(res.id).create({password});
-
         res.password = '';
-        return res;
+        return {status:200,users:[res]};
       })
       .catch(err => {
-        return err;
+        if (err.code === 11000) {            
+          return {status:500,error:`${err.keyValue.email} email already exist.`};
+        } else {
+          return {status:500,error:err.message};
+        }        
       });
 
     return response;
@@ -180,7 +190,7 @@ export class UsersController {
       },
     })
     userLogin: Omit<Users, '_id'>,
-  ): Promise<Users | undefined | string> {
+  ): Promise<apiResponse> {
     const user = await this.usersRepository.findOne({
       where: {email: userLogin.email},
     });
@@ -195,10 +205,9 @@ export class UsersController {
         this.userService.convertToUserProfile(userCredentials);
       const token = await this.jwtService.generateToken(userProfile);
 
-      user.password = '';
-      return token;
-    } catch (error) {
-      return error.message;
+      return {status:200,message:token};
+    } catch (err) {
+      return {status:500,error:err.message};
     }
   }
 

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Welcome from "./Pages/Welcome/Welcome";
-import Login from "./Pages/Login/Login";
-import LoginSuccessful from "./Pages/Login/LoginSuccessful";
+import Login from "./Pages/login/login";
+import LoginSuccessful from "./Pages/login/loginSuccessful";
 import Register from "./Pages/register/register";
 import RegisterSuccessful from "./Pages/register/registerSuccessful";
 import ManageUser from "./Pages/User/ManageUser";

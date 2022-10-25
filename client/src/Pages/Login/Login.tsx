@@ -5,15 +5,17 @@ import Header from "../../Components/Header";
 import Button from "../../Components/Button";
 import InputGroup from "../../Components/InputGroup";
 
-// import { ApiLoginUser } from "../../Utilitites/Api";
-// import { CookiesCreate } from "../../Utilitites/Cookies";
+import { CookiesCreate } from "../../utilities/cookies";
 // import { LoggedInCreate } from "../../Utilitites/LoggedIn";
 
 // import { SocketConnect } from "../../Utilitites/Socket";
 
+import { useAppDispatch } from "../../utilities/hooks";
+import { loginUser } from "../../utilities/slice/userSlice";
+
 const Login: React.FC = () => {
   // const socket = SocketConnect();
-
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
@@ -55,28 +57,25 @@ const Login: React.FC = () => {
         password: "Password is required.",
       }));
 
+      interface postValue {
+        email: string;
+        password: string;
+      }
+    
+      const postValue: postValue = {
+        email: formValues.email,
+        password: formValues.password,
+      };
+
     if (formValues.email !== "" && formValues.password !== "") {
-      navigate("/login-success");
-      // await ApiLoginUser(formValues).then((res) => {
-      //   if (res.status === "ok") {
-      //     CookiesCreate(res.token);
-
-      //     LoggedInCreate(res.user);
-
-      //     socket.emit("send_message", {
-      //       message: {
-      //         userId: { fullname: res.user.fullname },
-      //         message: "Logged in...",
-      //         dateSend: "***",
-      //       },
-      //     });
-
-      //     navigate("/login-success");
-      //   } else {
-      //     alert(res.message);
-      //     return;
-      //   }
-      // });
+      await dispatch(loginUser(postValue)).then((res) => {
+        if (res.type === 'users/loginUser/fulfilled') {
+          CookiesCreate(res.payload);
+          navigate("/login-success");
+        } else {
+          alert(res.payload);
+        }
+      });
     }
   };
   return (
