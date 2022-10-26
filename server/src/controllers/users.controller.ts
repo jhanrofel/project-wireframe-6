@@ -9,7 +9,7 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Chats, ShareTo, Users} from '../models';
+import {Chats, Uploads, ShareTo, Users} from '../models';
 import {
   UsersRepository,
   ShareToRepository,
@@ -271,5 +271,14 @@ export class UsersController {
       where: {user: id},
       include: [{relation: 'chatUser', scope: {fields: ['fullname']}}],
     });
+  }
+
+  @get('/users/{id}/uploads', {
+    responses: {
+      '200': {description: 'Array of Uploads by User'},
+    },
+  })
+  async findUserUploads(@param.path.string('id') id: string): Promise<Uploads[]> {
+    return this.usersRepository.userUploads(id).find();
   }
 }
