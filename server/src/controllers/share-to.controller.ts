@@ -30,12 +30,12 @@ export class ShareToController {
         'application/json': {
           schema: getModelSchemaRef(ShareTo, {
             title: 'NewShareTo',
-            exclude: ['_id'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    shareTo: Omit<ShareTo, '_id'>,
+    shareTo: Omit<ShareTo, 'id'>,
   ): Promise<ShareTo> {
     return this.shareToRepository.create(shareTo);
   }

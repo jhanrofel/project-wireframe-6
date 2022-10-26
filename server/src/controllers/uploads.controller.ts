@@ -39,12 +39,12 @@ export class UploadsController {
         'application/json': {
           schema: getModelSchemaRef(Uploads, {
             title: 'NewUploads',
-            exclude: ['_id'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    uploads: Omit<Uploads, '_id'>,
+    uploads: Omit<Uploads, 'id'>,
   ): Promise<Uploads> {
     return this.uploadsRepository.create(uploads);
   }
@@ -79,7 +79,7 @@ export class UploadsController {
       content: {
         'application/json': {
           schema: getModelSchemaRef(Uploads, {
-            exclude: ['_id', 'filename', 'fileLocation', 'user'],
+            exclude: ['id', 'filename', 'fileLocation', 'user'],
           }),
         },
       },

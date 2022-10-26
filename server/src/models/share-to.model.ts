@@ -9,7 +9,7 @@ export class ShareTo extends Entity {
     id: true,
     generated: true,
   })
-  _id?: string;
+  id?: string;
 
   @belongsTo(() => Users, {name: 'shareToUser'})
   user: string;

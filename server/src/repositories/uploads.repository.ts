@@ -7,11 +7,11 @@ import {ShareToRepository} from './share-to.repository';
 
 export class UploadsRepository extends DefaultCrudRepository<
   Uploads,
-  typeof Uploads.prototype._id,
+  typeof Uploads.prototype.id,
   UploadsRelations
 > {
 
-  public readonly uploadUser: BelongsToAccessor<Users, typeof Uploads.prototype._id>;
+  public readonly uploadUser: BelongsToAccessor<Users, typeof Uploads.prototype.id>;
 
   constructor(
     @inject('datasources.MongoDB') dataSource: MongoDbDataSource, 

@@ -142,7 +142,7 @@ export class UsersController {
         },
       },
     })
-    users: Omit<Users, '_id,password'>,
+    users: Omit<Users, 'id,password'>,
   ): Promise<apiResponse> {
     const response = this.usersRepository
       .updateById(id, users)
@@ -175,7 +175,7 @@ export class UsersController {
       .find()
       .then(res => {
         res.map(upload =>
-          this.shareToRepository.deleteAll({upload: upload._id}),
+          this.shareToRepository.deleteAll({upload: upload.id}),
         );
       });
     await this.usersRepository.userUploads(id).delete();

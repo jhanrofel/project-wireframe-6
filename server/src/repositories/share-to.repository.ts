@@ -11,17 +11,17 @@ import {UploadsRepository} from './uploads.repository';
 
 export class ShareToRepository extends DefaultCrudRepository<
   ShareTo,
-  typeof ShareTo.prototype._id,
+  typeof ShareTo.prototype.id,
   ShareToRelations
 > {
   public readonly shareToUser: BelongsToAccessor<
     Users,
-    typeof ShareTo.prototype._id
+    typeof ShareTo.prototype.id
   >;
   
   public readonly shareToUpload: BelongsToAccessor<
     Uploads,
-    typeof ShareTo.prototype._id
+    typeof ShareTo.prototype.id
   >;
 
   constructor(
