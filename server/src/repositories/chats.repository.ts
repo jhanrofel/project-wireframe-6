@@ -6,14 +6,15 @@ import {UsersRepository} from './users.repository';
 
 export class ChatsRepository extends DefaultCrudRepository<
   Chats,
-  typeof Chats.prototype._id,
+  typeof Chats.prototype.id,
   ChatsRelations
 > {
 
-  public readonly chatUser: BelongsToAccessor<Users, typeof Chats.prototype._id>;
+  public readonly chatUser: BelongsToAccessor<Users, typeof Chats.prototype.id>;
 
   constructor(
-    @inject('datasources.MongoDB') dataSource: MongoDbDataSource, @repository.getter('UsersRepository') protected usersRepositoryGetter: Getter<UsersRepository>,
+    @inject('datasources.MongoDB') dataSource: MongoDbDataSource, 
+    @repository.getter('UsersRepository') protected usersRepositoryGetter: Getter<UsersRepository>,
   ) {
     super(Chats, dataSource);
     this.chatUser = this.createBelongsToAccessorFor('chatUser', usersRepositoryGetter,);

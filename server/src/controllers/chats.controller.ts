@@ -29,12 +29,12 @@ export class ChatsController {
         'application/json': {
           schema: getModelSchemaRef(Chats, {
             title: 'NewChats',
-            exclude: ['_id'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    chats: Omit<Chats, '_id'>,
+    chats: Omit<Chats, 'id'>,
   ): Promise<Chats> {
     return this.chatsRepository.create(chats);
   }
