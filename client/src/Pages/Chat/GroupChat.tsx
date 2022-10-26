@@ -6,7 +6,7 @@ import Button from "../../Components/button";
 import { LoggedIn } from "../../utilities/loggedIn";
 import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
 // import { SocketConnect } from "../../Utilitites/Socket";
-import { postChat, fetchUserChats } from "../../utilities/slice/chatsSlice";
+import { postChat, fetchUserChats } from "../../utilities/slice/chatSlice";
 
 const GroupChat: React.FC = () => {
   const navigate = useNavigate();
