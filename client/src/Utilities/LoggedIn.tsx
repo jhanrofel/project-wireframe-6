@@ -1,7 +1,7 @@
 import { CookiesToken } from "./cookies";
 
 interface userLoggedIn {
-  userId: string;
+  id: string;
   fullname: string;
   email: string;
 }
@@ -10,7 +10,7 @@ export const LoggedInCreate = (user: userLoggedIn): void => {
   localStorage.setItem(
     "loggedIn",
     JSON.stringify({
-      userId: user.userId,
+      id: user.id,
       fullname: user.fullname,
       email: user.email,
     })

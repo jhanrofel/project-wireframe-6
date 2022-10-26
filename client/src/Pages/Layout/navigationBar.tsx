@@ -5,7 +5,7 @@ import { CookiesRemove } from "../../utilities/cookies";
 import { LoggedInRemove, LoggedIn } from "../../utilities/loggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";
 import { clearUser } from "../../utilities/slice/userSlice";
-// import { clearChat } from "../../Utilitites/Slice/ChatSlice";
+import { clearChat } from "../../utilities/slice/chatsSlice";
 // import { clearUpload } from "../../Utilitites/Slice/UploadSlice";
 // import { clearShare } from "../../Utilitites/Slice/ShareSlice";
 
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
 
   const onLogout = async () => {
     dispatch(clearUser());
-    //   dispatch(clearChat());
+    dispatch(clearChat());
     //   dispatch(clearUpload());
     //   dispatch(clearShare());
     LoggedInRemove();

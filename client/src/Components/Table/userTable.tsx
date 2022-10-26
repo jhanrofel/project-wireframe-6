@@ -1,4 +1,4 @@
-import React, { ElementRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
@@ -104,7 +104,7 @@ const UserTable = ({ data }: AppProps) => {
               <td className="td-border">{user.email}</td>
               <td>
                 {editAction(user.id)}|
-                {loggedIn.userId !== user.id
+                {loggedIn.id !== user.id
                   ? deleteAction(user.id)
                   : deleteDisable()}
               </td>

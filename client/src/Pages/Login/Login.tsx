@@ -58,13 +58,13 @@ const Login: React.FC = () => {
         password: string;
       }
     
-      const postValue: postValue = {
+      const postFormValue: postValue = {
         email: formValues.email,
         password: formValues.password,
       };
 
     if (formValues.email !== "" && formValues.password !== "") {
-      await dispatch(loginUser(postValue)).then((res) => {
+      await dispatch(loginUser(postFormValue)).then((res) => {
         if (res.type === 'users/loginUser/fulfilled') {
           CookiesCreate(res.payload.message);
           LoggedInCreate(res.payload.users[0]);

@@ -9,11 +9,12 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {ShareTo, Users} from '../models';
+import {Chats, ShareTo, Users} from '../models';
 import {
   UsersRepository,
   ShareToRepository,
   UploadsRepository,
+  ChatsRepository,
 } from '../repositories';
 import {genSalt, hash, compare} from 'bcryptjs';
 import {inject} from '@loopback/core';
@@ -31,7 +32,7 @@ import {authenticate} from '@loopback/authentication';
 interface apiResponse {
   status: number;
   message?: string;
-  users?: Users[]|void[];
+  users?: Users[] | void[];
   error?: string;
 }
 
@@ -40,6 +41,8 @@ export class UsersController {
   constructor(
     @repository(UsersRepository)
     public usersRepository: UsersRepository,
+    @repository(ChatsRepository)
+    public chatsRepository: ChatsRepository,
     @repository(UploadsRepository)
     public uploadsRepository: UploadsRepository,
     @repository(ShareToRepository)
@@ -71,7 +74,7 @@ export class UsersController {
         },
       },
     })
-    users: Omit<Users, '_id'>,
+    users: Omit<Users, 'id'>,
   ): Promise<apiResponse> {
     const password = await hash(users.password, await genSalt());
     users.password = password;
@@ -109,7 +112,9 @@ export class UsersController {
     },
   })
   async find(): Promise<apiResponse> {
-    const users:Users[] = await this.usersRepository.find({fields: {password: false}});
+    const users: Users[] = await this.usersRepository.find({
+      fields: {password: false},
+    });
     return {status: 200, users: users};
   }
 
@@ -141,7 +146,7 @@ export class UsersController {
   ): Promise<apiResponse> {
     const response = this.usersRepository
       .updateById(id, users)
-      .then((res) => {
+      .then(res => {
         return {status: 200, users: [res]};
       })
       .catch(err => {
@@ -198,7 +203,7 @@ export class UsersController {
         },
       },
     })
-    userLogin: Omit<Users, '_id'>,
+    userLogin: Omit<Users, 'id'>,
   ): Promise<apiResponse> {
     const user = await this.usersRepository.findOne({
       where: {email: userLogin.email},
@@ -246,6 +251,25 @@ export class UsersController {
           },
         },
       ],
+    });
+  }
+
+  @get('/users/{id}/chats', {
+    responses: {
+      '200': {
+        description: 'Array of Users has many Chats',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Chats)},
+          },
+        },
+      },
+    },
+  })
+  async findUserChats(@param.path.string('id') id: string): Promise<Chats[]> {
+    return this.chatsRepository.find({
+      where: {user: id},
+      include: [{relation: 'chatUser', scope: {fields: ['fullname']}}],
     });
   }
 }

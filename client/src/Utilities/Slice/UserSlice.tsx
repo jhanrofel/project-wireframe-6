@@ -44,6 +44,7 @@ export const loginUser = createAsyncThunk(
     })
       .then((res) => {
         if (res.data.status === 200) {
+          console.log(res.data);
           return res.data;
         } else {
           return rejectWithValue(res.data.error);

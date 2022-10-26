@@ -36,7 +36,10 @@ export class ChatsController {
     })
     chats: Omit<Chats, 'id'>,
   ): Promise<Chats> {
-    return this.chatsRepository.create(chats);
+    const chat = await this.chatsRepository.create(chats);
+    return this.chatsRepository.findById(chat.id, {
+      include: [{relation: 'chatUser', scope: {fields: ['fullname']}}],
+    });
   }
 
   @get('/chats')

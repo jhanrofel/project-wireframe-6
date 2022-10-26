@@ -8,7 +8,7 @@ import ManageUser from "./Pages/user/manageUser";
 import EditUser from "./Pages/user/editUser";
 import ManageDocument from "./Pages/UploadFile/ManageDocument";
 import ShareFile from "./Pages/UploadFile/ShareFile";
-import GroupChat from "./Pages/Chat/GroupChat";
+import GroupChat from "./Pages/chat/groupChat";
 import PageNotFound from "./Pages/pageNotFound";
 import ProtectedLayout from "./Pages/layout/protectedLayout";
 import PublicLayout from "./Pages/layout/publicLayout";

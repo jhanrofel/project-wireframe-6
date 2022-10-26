@@ -1,34 +1,30 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Components/button";
-
-// import { LoggedIn } from "../../Utilitites/LoggedIn";
+import { LoggedIn } from "../../utilities/loggedIn";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
 // import { SocketConnect } from "../../Utilitites/Socket";
-// import { useDispatch, useSelector } from "react-redux";
-// import { postChat, fetchChats } from "../../Utilitites/Slice/ChatSlice";
+import { postChat, fetchUserChats } from "../../utilities/slice/chatsSlice";
 
 const GroupChat: React.FC = () => {
-  
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const chats = useSelector((state) => state.chat.data);
-  const chats:string[] = [];
+  const dispatch = useAppDispatch();
+  const chats = useAppSelector((state) => state.chats.data);
   // const socket = SocketConnect();
-  // const loggedIn = LoggedIn();
+  const loggedIn = LoggedIn();
   const closeButton = <FontAwesomeIcon icon={faXmark} />;
-  const [chat, setChat] = useState("");
-  const bottomRef = useRef(null);
+  const [chat, setChat] = useState<string>("");
+  const bottomRef = useRef<null | HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   dispatch(fetchChats());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchUserChats(loggedIn.id));
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [chats]);
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>): void => {
     setChat((event.target as HTMLInputElement).value);
@@ -40,26 +36,31 @@ const GroupChat: React.FC = () => {
       return;
     }
 
-    // const today = new Date();
-    // const dateSend =
-    //   today.getFullYear() +
-    //   "-" +
-    //   String(today.getMonth() + 1).padStart(2, "0") +
-    //   "-" +
-    //   String(today.getDate()).padStart(2, "0") +
-    //   " " +
-    //   String(today.getHours()).padStart(2, "0") +
-    //   ":" +
-    //   String(today.getMinutes()).padStart(2, "0") +
-    //   ":" +
-    //   String(today.getSeconds()).padStart(2, "0");
+    const today = new Date();
+    const dateSend =
+      today.getFullYear() +
+      "-" +
+      String(today.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(today.getDate()).padStart(2, "0") +
+      " " +
+      String(today.getHours()).padStart(2, "0") +
+      ":" +
+      String(today.getMinutes()).padStart(2, "0") +
+      ":" +
+      String(today.getSeconds()).padStart(2, "0");
 
-    // const chatData = {
-    //   userId: loggedIn.userId,
-    //   userName: loggedIn.fullname,
-    //   dateSend: dateSend,
-    //   message: chat,
-    // };
+    interface ChatData {
+      user: string;
+      dateSend: string;
+      message: string;
+    }
+
+    const chatData = {
+      user: loggedIn.id,
+      dateSend: dateSend,
+      message: chat,
+    } as ChatData;
 
     // const newChat = {
     //   userId: { fullname: loggedIn.fullname },
@@ -67,10 +68,10 @@ const GroupChat: React.FC = () => {
     //   message: chat,
     // };
 
-    // dispatch(postChat({ chatData, newChat })).then(() => {
-    //   setChat("");
-    //   socket.emit("send_message", { message: newChat });
-    // });
+    dispatch(postChat(chatData)).then(() => {
+      setChat("");
+      // socket.emit("send_message", { message: newChat });
+    });
 
     return;
   };
@@ -83,14 +84,14 @@ const GroupChat: React.FC = () => {
         <div id="message-container">
           {chats.map((chat, i) => (
             <div key={i} className="gc-message">
-              {/* {`[${chat.dateSend}] ${chat.user.fullname} : ${chat.message}`} */}
+              {`[${chat.dateSend}] ${chat.chatUser.fullname} : ${chat.message}`}
             </div>
           ))}
           <div ref={bottomRef} />
         </div>
       </div>
       <div className="gc-footer">
-        <span>{/*loggedIn.fullname*/}</span>
+        <span>{loggedIn.fullname}</span>
         <input name="chat" value={chat} onChange={onChangeHandler}></input>
 
         <Button
