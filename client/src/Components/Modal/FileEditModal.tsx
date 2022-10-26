@@ -3,33 +3,23 @@ import BsButton from "react-bootstrap/Button";
 import BsModal from "react-bootstrap/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-// import { useDispatch } from "react-redux";
-// import { updateUpload } from "../../Utilitites/Slice/UploadSlice";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
+import { updateUpload } from "../../utilities/slice/uploadSlice";
 
 type AppProps = {
-  showEdit:boolean;
+  showEdit: boolean;
   handleCloseEdit: () => void;
-  editUploadId: string;
-  uploadLists: string[];
-}
+};
 
-const FileEditModal = ({
-  showEdit,
-  handleCloseEdit,
-  editUploadId,
-  uploadLists,
-} : AppProps) => {
-  // const dispatch = useDispatch();
+const FileEditModal = ({ showEdit, handleCloseEdit }: AppProps) => {
+  const dispatch = useAppDispatch();
   const closeButton = <FontAwesomeIcon icon={faXmark} />;
-  const [fileLabel, setFileLabel] = useState("");
+  const upload = useAppSelector((state) => state.uploads.dataOne);
+  const [fileLabel, setFileLabel] = useState<string>("");
 
-  // useEffect(() => {
-  //   setFileLabel(      
-  //     editUploadId
-  //       ? uploadLists.filter((upload) => upload._id === editUploadId)[0].label
-  //       : ""
-  //   );// eslint-disable-next-line
-  // }, [editUploadId]);
+  useEffect(() => {
+    setFileLabel(upload.label || "");
+  }, [dispatch, upload]);
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     setFileLabel((event.target as HTMLInputElement).value);
@@ -39,13 +29,21 @@ const FileEditModal = ({
     try {
       if (fileLabel === "") throw new Error("File description is required.");
     } catch (error) {
-      // alert(error.message);
+      alert(error);
       return;
     }
-    
-    // await dispatch(updateUpload({ editUploadId, fileLabel})).then(() => {
-    //   handleCloseEdit();
-    // });
+
+    interface formValues {
+      label: string;
+    }
+    const uploadId: string = upload.id;
+    const formValues = {
+      label: fileLabel,
+    } as formValues;
+
+    await dispatch(updateUpload({ uploadId, formValues })).then(() => {
+      handleCloseEdit();
+    });
   };
   return (
     <BsModal show={showEdit} onHide={handleCloseEdit} name="modal-upload">
@@ -75,7 +73,7 @@ const FileEditModal = ({
         </div>
       </div>
     </BsModal>
-  )
-}
+  );
+};
 
 export default FileEditModal;

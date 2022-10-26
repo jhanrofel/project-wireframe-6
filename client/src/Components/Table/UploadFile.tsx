@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import BsButton from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-
 import TableHeader from "../tableHeader";
 import EmptyRow from "../emptyRow";
 import ConfirmModal from "../modal/confirmModal";
 import FileEditModal from "../modal/fileEditModal";
-
 // import { ApiDownloadFile } from "../../Utilitites/Api";
-// import { useDispatch } from "react-redux";
-// import { deleteUpload } from "../../Utilitites/Slice/UploadSlice";
+import { useAppSelector,useAppDispatch } from "../../utilities/hooks";
+import { fetchUploadOne,deleteUpload } from "../../utilities/slice/uploadSlice";
+
 type AppProps = {
   data: {
-    name: string;
     headers: Array<{
       label: string;
       width: string;
@@ -23,15 +20,14 @@ type AppProps = {
     numCols: number;
   };
 
-  uploadLists: string[];
 };
 
-const UploadFile = ({ data, uploadLists }: AppProps) => {
+const UploadFile = ({ data }: AppProps) => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const uploadLists = useAppSelector((state) => state.uploads.data);
+  const upload = useAppSelector((state) => state.uploads.dataOne);
 
-  const [deleteUploadId, setDeleteUploadId] = useState("");
-  const [editUploadId, setEditUploadId] = useState("");
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const handleClose = () => setShow(false);
@@ -58,7 +54,7 @@ const UploadFile = ({ data, uploadLists }: AppProps) => {
   };
 
   const onEditActionHandler = (id: string): void => {
-    setEditUploadId(id);
+    dispatch(fetchUploadOne(id));
     setShowEdit(true);
   };
 
@@ -75,16 +71,15 @@ const UploadFile = ({ data, uploadLists }: AppProps) => {
   };
 
   const onDeleteActionHandler = (id: string): void => {
-    setDeleteUploadId(id);
+    dispatch(fetchUploadOne(id));
     setShow(true);
   };
 
-  const onDeleteHandler = async (): Promise<void> => {
-    // await dispatch(deleteUpload(deleteUploadId)).then(() => {
-    //   setEditUploadId("");
-    //   setDeleteUploadId("");
-    //   setShow(false);
-    // });
+  const onDeleteSubmitHandler = async (): Promise<void> => {
+    const uploadId: string = upload.id;
+    await dispatch(deleteUpload(uploadId)).then(() => {
+      setShow(false);
+    });
   };
 
   const downloadAction = (fileName: string, fileLocation: string) => {
@@ -134,14 +129,14 @@ const UploadFile = ({ data, uploadLists }: AppProps) => {
         <tbody>
           {uploadLists.map((list, i) => (
             <tr key={i}>
-              {/* <td className="td-left">{list.label}</td>
+              <td className="td-left">{list.label}</td>
               <td className="td-border">
                 {downloadAction(list.filename, list.fileLocation)}
               </td>
               <td>
-                {editAction(list._id)}|{deleteAction(list._id)}|
-                {shareAction(list._id, list.label)}
-              </td> */}
+                {editAction(list.id)}|{deleteAction(list.id)}|
+                {shareAction(list.id, list.label)}
+              </td>
             </tr>
           ))}
           <EmptyRow
@@ -154,13 +149,11 @@ const UploadFile = ({ data, uploadLists }: AppProps) => {
         show={show}
         handleClose={handleClose}
         modalData={modalData}
-        onConfirmHandler={onDeleteHandler}
+        onConfirmHandler={onDeleteSubmitHandler}
       />
       <FileEditModal
         showEdit={showEdit}
         handleCloseEdit={handleCloseEdit}
-        editUploadId={editUploadId}
-        uploadLists={uploadLists}
       />
     </div>
   );

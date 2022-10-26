@@ -4,23 +4,19 @@ import ShareUpload from "../../Components/table/shareUpload";
 import TableTitle from "../../Components/tableTitle";
 import Button from "../../Components/button";
 import UploadModal from "../../Components/modal/uploadModal";
+import { LoggedIn } from "../../utilities/loggedIn";
+import { useAppDispatch } from "../../utilities/hooks";
+import { fetchUploads } from "../../utilities/slice/uploadSlice";
 
-// import { LoggedIn } from "../../Utilitites/LoggedIn";
-// import { useDispatch,useSelector } from "react-redux";
-// import { fetchUploads } from "../../Utilitites/Slice/UploadSlice";
 const ManageDocument: React.FC = () => {
-  // const loggedIn = LoggedIn();
-  // const dispatch = useDispatch();
+  const loggedIn = LoggedIn();
+  const dispatch = useAppDispatch();
 
-  // const uploadLists = useSelector((state) => state.upload.data);
-  const uploadLists:string[] = [];
-  
-  // useEffect(() => {
-  //   dispatch(fetchUploads(loggedIn.userId));
-  // },[dispatch,loggedIn.userId]);
+  useEffect(() => {
+    dispatch(fetchUploads(loggedIn.id));
+  }, [dispatch, loggedIn.id]);
 
   const uploadFiles = {
-    name: "upload-file",
     headers: [
       { label: "Label", width: "35%" },
       { label: "File Name", width: "35%" },
@@ -50,13 +46,10 @@ const ManageDocument: React.FC = () => {
   return (
     <>
       <TableTitle text="My Uploads" />
-      <TableUploadFile
-        data={uploadFiles}
-        uploadLists={uploadLists}
-      />
+      <TableUploadFile data={uploadFiles} />
       <TableTitle text="Share Uploads" />
       <div>
-        <ShareUpload data={shareFiles}/>
+        <ShareUpload data={shareFiles} />
         <div className="button-style-upload">
           <Button
             name="upload"
@@ -74,7 +67,7 @@ const ManageDocument: React.FC = () => {
         // setUploadFiles={setUploadFiles}
       />
     </>
-  )
-}
+  );
+};
 
 export default ManageDocument;
