@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthToken, Unauthorize } from "../authentication";
+import { authenticationToken, unauthorize } from "../authentication";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -17,7 +17,7 @@ export const postChat = createAsyncThunk(
       method: "post",
       data: formValues,
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => {
@@ -32,12 +32,12 @@ export const fetchChats = createAsyncThunk("chats/fetchUsers", async () => {
     url: `/chats`,
     method: "get",
     headers: {
-      Authorization: AuthToken(),
+      Authorization: authenticationToken(),
     },
   })
     .then((res) => res.data)
     .catch((error) => {
-      if (error.response.data.error.name === "UnauthorizedError") Unauthorize();
+      if (error.response.data.error.name === "UnauthorizedError") unauthorize();
       return error;
     });
 });
@@ -49,13 +49,13 @@ export const fetchUserChats = createAsyncThunk(
       url: `/users/${userId}/chats`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }

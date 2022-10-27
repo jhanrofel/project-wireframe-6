@@ -1,12 +1,12 @@
 import { cookiesToken, cookiesRemove } from "./cookies";
 import { loggedInRemove } from "./loggedIn";
 
-export const AuthToken = (): string => {
+export const authenticationToken = (): string => {
   const token = cookiesToken();
   return `Bearer ${token}`;
 };
 
-export const Unauthorize = () => {
+export const unauthorize = () => {
   loggedInRemove();
   cookiesRemove();
 };

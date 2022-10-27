@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthToken, Unauthorize } from "../authentication";
+import { authenticationToken, unauthorize } from "../authentication";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -10,13 +10,13 @@ export const fetchUploadShareTos = createAsyncThunk(
       url: `/uploads/${uploadId}/share-tos`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -29,13 +29,13 @@ export const fetchUploadChoose = createAsyncThunk(
       url: `/uploads/${uploadId}/choose-to-share`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -48,13 +48,13 @@ export const fetchShareOne = createAsyncThunk(
       url: `/share-tos/${shareToId}`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -73,13 +73,13 @@ export const postShare = createAsyncThunk(
       method: "post",
       data: formValues,
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -92,13 +92,13 @@ export const deleteShare = createAsyncThunk(
       url: `/share-tos/${shareToId}`,
       method: "delete",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }

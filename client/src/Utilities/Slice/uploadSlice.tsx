@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthToken, Unauthorize } from "../authentication";
+import { authenticationToken, unauthorize } from "../authentication";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -10,13 +10,13 @@ export const fetchUploads = createAsyncThunk(
       url: `/users/${userId}/uploads`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -29,13 +29,13 @@ export const fetchUploadOne = createAsyncThunk(
       url: `/uploads/${uploadId}`,
       method: "get",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => res.data)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -49,7 +49,7 @@ export const postUpload = createAsyncThunk(
       method: "post",
       data: file,
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then((res) => {
@@ -59,7 +59,7 @@ export const postUpload = createAsyncThunk(
       .catch((error) => {
         console.log(file);
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -83,7 +83,7 @@ export const updateUpload = createAsyncThunk(
       method: "patch",
       data: formValues,
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then(() => {
@@ -91,7 +91,7 @@ export const updateUpload = createAsyncThunk(
       })
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
@@ -104,13 +104,13 @@ export const deleteUpload = createAsyncThunk(
       url: `/uploads/${uploadId}`,
       method: "delete",
       headers: {
-        Authorization: AuthToken(),
+        Authorization: authenticationToken(),
       },
     })
       .then(() => uploadId)
       .catch((error) => {
         if (error.response.data.error.name === "UnauthorizedError")
-          Unauthorize();
+          unauthorize();
         return error;
       });
   }
