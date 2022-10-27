@@ -1,4 +1,4 @@
-import { CookiesToken } from "./cookies";
+import { cookiesToken } from "./cookies";
 
 interface userLoggedIn {
   id: string;
@@ -18,7 +18,7 @@ export const LoggedInCreate = (user: userLoggedIn): void => {
 };
 
 export const IsLogged = (): number => {
-  const token = CookiesToken();
+  const token = cookiesToken();
   return localStorage.getItem("loggedIn") && token ? 1 : 0;
 };
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../Components/header";
 import Button from "../../Components/button";
 import InputGroup from "../../Components/inputGroup";
-import { CookiesCreate } from "../../utilities/cookies";
+import { cookiesCreate } from "../../utilities/cookies";
 import { LoggedInCreate } from "../../utilities/loggedIn";
 // import { SocketConnect } from "../../Utilitites/Socket";
 import { useAppDispatch } from "../../utilities/hooks";
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
     if (formValues.email !== "" && formValues.password !== "") {
       await dispatch(loginUser(postFormValue)).then((res) => {
         if (res.type === 'users/loginUser/fulfilled') {
-          CookiesCreate(res.payload.message);
+          cookiesCreate(res.payload.message);
           LoggedInCreate(res.payload.users[0]);
           navigate("/login-success");
         } else {

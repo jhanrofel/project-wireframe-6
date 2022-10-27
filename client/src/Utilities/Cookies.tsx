@@ -1,13 +1,13 @@
 import cookie from 'react-cookies';
 
-export const CookiesCreate = (token:string):void => {
+export const cookiesCreate = (token:string):void => {
   cookie.save("projwftoken",token, {path:"/"});
 };
 
-export const CookiesToken = ():string => {
+export const cookiesToken = ():string => {
   return cookie.load('projwftoken');
 };
 
-export const CookiesRemove = ():void => {
+export const cookiesRemove = ():void => {
   cookie.remove('projwftoken', { path: '/' })
 };

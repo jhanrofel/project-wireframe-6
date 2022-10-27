@@ -1,34 +1,24 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../utilities/hooks";
-import { CookiesRemove } from "../../utilities/cookies";
-import { LoggedInRemove, LoggedIn } from "../../utilities/loggedIn";
-// import { SocketConnect } from "../../Utilitites/Socket";
+import { cookiesRemove } from "../../utilities/cookies";
+import { LoggedInRemove } from "../../utilities/loggedIn";
 import { clearUser } from "../../utilities/slice/userSlice";
 import { clearChat } from "../../utilities/slice/chatSlice";
 import { clearUpload } from "../../utilities/slice/uploadSlice";
-// import { clearShare } from "../../Utilitites/Slice/ShareSlice";
+import { clearShareTo } from "../../utilities/slice/shareToSlice";
 
 const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const loggedIn = LoggedIn();
-  // const socket = SocketConnect();
   const pathname = useLocation().pathname;
 
   const onLogout = async () => {
     dispatch(clearUser());
     dispatch(clearChat());
     dispatch(clearUpload());
-    //   dispatch(clearShare());
+    dispatch(clearShareTo());
     LoggedInRemove();
-    CookiesRemove();
-    //   socket.emit("send_message", {
-    //     message: {
-    //       userId: { fullname: loggedIn.fullname },
-    //       message: "Logged out...",
-    //       dateSend: "***",
-    //     },
-    //   });
+    cookiesRemove();
   };
   return (
     <>
