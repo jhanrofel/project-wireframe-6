@@ -246,7 +246,7 @@ export class UsersController {
           scope: {
             fields: ['label', 'filename', 'fileLocation', 'user'],
             include: [
-              {relation: 'uploadUser', scope: {fields: ['fullname', 'email']}},
+              {relation: 'uploadUser', scope: {fields: ['id','fullname', 'email']}},
             ],
           },
         },

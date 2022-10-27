@@ -1,38 +1,34 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
-
 import TableHeader from "../tableHeader";
 import EmptyRow from "../emptyRow";
-
+import { loggedInData } from "../../utilities/loggedIn";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
+import { fetchUserShares } from "../../utilities/slice/userSlice";
 // import { ApiDownloadFile } from "../../Utilitites/Api";
-// import { LoggedIn } from "../../Utilitites/LoggedIn";
-
-// import { useDispatch, useSelector } from "react-redux";
-// import { fetchShareToUser } from "../../Utilitites/Slice/ShareSlice";
 
 type AppProps = {
-  data:  {
+  data: {
     headers: Array<{
-      label:string;
-      width:string;
+      label: string;
+      width: string;
     }>;
     minRows: number;
     numCols: number;
   };
-}
+};
 
-const ShareUpload = ({data} : AppProps) => {
-  // const dispatch = useDispatch();
-  // const loggedIn = LoggedIn();
-  // const shareFiles = useSelector((state) => state.share.data);
-  const shareFiles:string[] = [];
+const ShareUpload = ({ data }: AppProps) => {
+  const dispatch = useAppDispatch();
+  const loggedIn = loggedInData();
+  const shareFiles = useAppSelector((state) => state.users.dataShare);
 
-  // useEffect(() => {
-  //   dispatch(fetchShareToUser(loggedIn.userId));
-  // }, [dispatch, loggedIn.userId]);
+  useEffect(() => {
+    dispatch(fetchUserShares(loggedIn.id));
+  }, [dispatch, loggedIn.id]);
 
-  const downloadAction = (fileName:string, fileLocation:string) => {
+  const downloadAction = (fileName: string, fileLocation: string) => {
     return (
       <BsButton
         className="btn-download"
@@ -44,7 +40,10 @@ const ShareUpload = ({data} : AppProps) => {
     );
   };
 
-  const onDownloadActionHandler = (fileName:string, fileLocation:string):void => {
+  const onDownloadActionHandler = (
+    fileName: string,
+    fileLocation: string
+  ): void => {
     // ApiDownloadFile({
     //   fileLocation: fileLocation,
     //   filename: fileName,
@@ -58,18 +57,18 @@ const ShareUpload = ({data} : AppProps) => {
       <Table striped>
         <TableHeader headers={data.headers} />
         <tbody>
-          {/* {shareFiles.map((list, i) => (
+          {shareFiles.map((shareTo, i) => (
             <tr key={i}>
-              <td className="td-left">{list.uploadFileId.label}</td>
+              <td className="td-left">{shareTo.shareToUpload.label}</td>
               <td className="td-border">
                 {downloadAction(
-                  list.uploadFileId.filename,
-                  list.uploadFileId.fileLocation
+                  shareTo.shareToUpload.filename,
+                  shareTo.shareToUpload.fileLocation
                 )}
               </td>
-              <td>{list.fromUserId.email}</td>
+              <td>{shareTo.shareToUpload.uploadUser.email}</td>
             </tr>
-          ))} */}
+          ))}
           <EmptyRow
             count={data.minRows - shareFiles.length}
             colCount={data.numCols}
@@ -77,7 +76,7 @@ const ShareUpload = ({data} : AppProps) => {
         </tbody>
       </Table>
     </div>
-  )
-}
+  );
+};
 
 export default ShareUpload;

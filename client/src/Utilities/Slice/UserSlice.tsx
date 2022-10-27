@@ -91,6 +91,25 @@ export const fetchUserOne = createAsyncThunk(
   }
 );
 
+export const fetchUserShares = createAsyncThunk(
+  "users/fetchUserShares",
+  async (userId: string) => {
+    return await axios({
+      url: `/users/${userId}/share-tos`,
+      method: "get",
+      headers: {
+        Authorization: authenticationToken(),
+      },
+    })
+      .then((res) => res.data)
+      .catch((error) => {
+        if (error.response.data.error.name === "UnauthorizedError")
+          unauthorize();
+        return error;
+      });
+  }
+);
+
 interface editFormValues {
   fullname: string;
   email: string;
@@ -147,10 +166,22 @@ interface userOneState {
   email: string;
 }
 
+interface userShareToUploadState {
+  label: string;
+  filename: string;
+  fileLocation: string;
+  uploadUser: userOneState;
+}
+
+interface userSharesState {
+  shareToUpload: userShareToUploadState;
+}
+
 interface userState {
   logged: boolean;
   data: userOneState[];
   dataOne: userOneState;
+  dataShare: userSharesState[];
   loading: "idle" | "pending" | "succeeded" | "failed";
   message: string;
 }
@@ -159,6 +190,7 @@ const initialState = {
   logged: isLogged() ? true : false,
   data: [{}],
   dataOne: {},
+  dataShare: [{}],
   loading: "idle",
 } as userState;
 
@@ -170,6 +202,7 @@ export const userSlice = createSlice({
       state.logged = false;
       state.data = [];
       state.dataOne = { id: "", fullname: "", email: "" };
+      state.dataShare = [];
       state.message = "";
     },
   },
@@ -188,6 +221,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.data = action.payload.users;
+    });
+    builder.addCase(fetchUserShares.fulfilled, (state,action) => {
+      state.dataShare = action.payload;
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.data = state.data.filter((user) => user.id !== action.payload);
