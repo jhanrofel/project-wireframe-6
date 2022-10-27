@@ -1,6 +1,5 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
-
 import Header from "../../components/header";
 import Subheader from "../../components/subheader";
 import Button from "../../components/button";

@@ -10,12 +10,21 @@ import {
   postShare,
 } from "../../utilities/slice/shareToSlice";
 
+interface tableValue {
+  headers: Array<{
+    label: string;
+    width: string;
+  }>;
+  minRows: number;
+  numCols: number;
+}
+
 const ShareFile: React.FC = () => {
   const dispatch = useAppDispatch();
   const { state } = useLocation();
   const [uploadFile] = useState(state);
 
-  const shareFiles = {
+  const shareFiles: tableValue = {
     headers: [
       { label: "Shared User", width: "50%" },
       { label: "Action", width: "50%" },
@@ -29,7 +38,7 @@ const ShareFile: React.FC = () => {
     (state) => state.shareTos.dataChooseUser
   );
 
-  const [selectUser, setSelectUser] = useState("");
+  const [selectUser, setSelectUser] = useState<string>("");
   const uploadid: string = uploadFile.id;
 
   useEffect(() => {
@@ -37,9 +46,11 @@ const ShareFile: React.FC = () => {
     dispatch(fetchUploadChoose(uploadid));
   }, [dispatch, uploadid]);
 
-  const onChangeSelectHandler = (event: React.FormEvent<HTMLSelectElement>) => {
+  const onChangeSelectHandler = (
+    event: React.FormEvent<HTMLSelectElement>
+  ): void => {
     let value = (event.target as HTMLInputElement).value;
-    setSelectUser(value);    
+    setSelectUser(value);
   };
 
   const onShareSubmitHandler = async (): Promise<void> => {
@@ -54,6 +65,7 @@ const ShareFile: React.FC = () => {
       }
     );
   };
+
   return (
     <>
       <TableTitle text={`Upload Sharing : ${uploadFile.filename}`} />
@@ -61,10 +73,7 @@ const ShareFile: React.FC = () => {
       <TableTitle text="Add Sharing" />
       <div className="choose-body">
         <span> Choose User : </span>
-        <select
-          value={selectUser}
-          onChange={onChangeSelectHandler}
-        >
+        <select value={selectUser} onChange={onChangeSelectHandler}>
           <option value="">{"--Select--"}</option>
           {shareToChoose.map((user, i) => (
             <option key={i} value={user.id}>

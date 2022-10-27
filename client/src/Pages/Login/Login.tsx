@@ -8,19 +8,24 @@ import { loggedInCreate } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { loginUser } from "../../utilities/slice/userSlice";
 
+interface formValuesState {
+  email: string;
+  password: string;
+}
+
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<formValuesState>({
     email: "",
     password: "",
   });
-  const [formErrors, setFormErrors] = useState({
+  const [formErrors, setFormErrors] = useState<formValuesState>({
     email: "",
     password: "",
   });
 
-  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>): void => {
     let name = (event.target as HTMLInputElement).name;
     let value = (event.target as HTMLInputElement).value;
 
@@ -38,7 +43,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const onLoginSubmitHandler = async () => {
+  const onLoginSubmitHandler = async (): Promise<void> => {
     if (formValues.email === "")
       setFormErrors((state) => ({
         ...state,
@@ -72,6 +77,7 @@ const Login: React.FC = () => {
       });
     }
   };
+
   return (
     <div>
       <div className="main">

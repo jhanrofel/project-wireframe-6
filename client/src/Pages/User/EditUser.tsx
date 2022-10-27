@@ -13,12 +13,17 @@ const EditUser: React.FC = () => {
   const { state } = useLocation();
   const userId = state;
 
+  interface formValueState {
+    fullname: string;
+    email: string;
+  }
+
   const user = useAppSelector((state) => state.users.dataOne);
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<formValueState>({
     fullname: user.fullname || "",
     email: user.email || "",
   });
-  const [formErrors, setFormErrors] = useState({
+  const [formErrors, setFormErrors] = useState<formValueState>({
     fullname: "",
     email: "",
   });
@@ -35,7 +40,7 @@ const EditUser: React.FC = () => {
     }));
   }, [user]);
 
-  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>): void => {
     let name = (event.target as HTMLInputElement).name;
     let value = (event.target as HTMLInputElement).value;
 
@@ -53,7 +58,7 @@ const EditUser: React.FC = () => {
     }
   };
 
-  const onSaveSubmitHandler = async () => {
+  const onSaveSubmitHandler = async (): Promise<void> => {
     if (formValues.fullname === "")
       setFormErrors((state) => ({
         ...state,

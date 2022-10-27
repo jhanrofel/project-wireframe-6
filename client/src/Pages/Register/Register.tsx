@@ -6,23 +6,30 @@ import Button from "../../components/button";
 import { useAppDispatch } from "../../utilities/hooks";
 import { postUser } from "../../utilities/slice/userSlice";
 
+interface formValueState {
+  fullname: string;
+  email: string;
+  password: string;
+  confirm: string;
+}
+
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<formValueState>({
     fullname: "",
     email: "",
     password: "",
     confirm: "",
   });
-  const [formErrors, setFormErrors] = useState({
+  const [formErrors, setFormErrors] = useState<formValueState>({
     fullname: "",
     email: "",
     password: "",
     confirm: "",
   });
 
-  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeHandler = (event: React.FormEvent<HTMLInputElement>): void => {
     let name = (event.target as HTMLInputElement).name;
     let value = (event.target as HTMLInputElement).value;
 
@@ -48,7 +55,7 @@ const Register: React.FC = () => {
     }
   };
 
-  const onRegisterSubmitHandler = async () => {
+  const onRegisterSubmitHandler = async (): Promise<void> => {
     if (formValues.fullname === "")
       setFormErrors((state) => ({
         ...state,
@@ -100,7 +107,7 @@ const Register: React.FC = () => {
         };
 
         await dispatch(postUser(postUserValue)).then((res) => {
-          if (res.type === 'users/postUser/fulfilled') {
+          if (res.type === "users/postUser/fulfilled") {
             navigate("/register-success");
           } else {
             alert(res.payload);

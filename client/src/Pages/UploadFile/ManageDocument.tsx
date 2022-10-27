@@ -8,6 +8,15 @@ import { loggedInData } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { fetchUploads } from "../../utilities/slice/uploadSlice";
 
+interface tableValue {
+  headers: Array<{
+    label: string;
+    width: string;
+  }>;
+  minRows: number;
+  numCols: number;
+}
+
 const ManageDocument: React.FC = () => {
   const loggedIn = loggedInData();
   const dispatch = useAppDispatch();
@@ -16,7 +25,7 @@ const ManageDocument: React.FC = () => {
     dispatch(fetchUploads(loggedIn.id));
   }, [dispatch, loggedIn.id]);
 
-  const uploadFiles = {
+  const uploadFiles:tableValue = {
     headers: [
       { label: "Label", width: "35%" },
       { label: "File Name", width: "35%" },
@@ -26,8 +35,7 @@ const ManageDocument: React.FC = () => {
     numCols: 3,
   };
 
-  const shareFiles = {
-    name: "share-file",
+  const shareFiles:tableValue = {
     headers: [
       { label: "Label", width: "35%" },
       { label: "File Name", width: "35%" },
@@ -37,10 +45,10 @@ const ManageDocument: React.FC = () => {
     numCols: 3,
   };
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [show, setShow] = useState<boolean>(false);
+  const handleClose = (): void => setShow(false);
 
-  const uploadAction = () => {
+  const uploadAction = (): void => {
     setShow(true);
   };
   return (
@@ -60,12 +68,7 @@ const ManageDocument: React.FC = () => {
           />
         </div>
       </div>
-      <UploadModal
-        show={show}
-        handleClose={handleClose}
-        // uploadLists={uploadLists}
-        // setUploadFiles={setUploadFiles}
-      />
+      <UploadModal show={show} handleClose={handleClose} />
     </>
   );
 };

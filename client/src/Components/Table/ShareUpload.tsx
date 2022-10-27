@@ -13,7 +13,6 @@ import EmptyRow from "../emptyRow";
 
 type AppProps = {
   data:  {
-    name: string;
     headers: Array<{
       label:string;
       width:string;
