@@ -20,7 +20,7 @@ export const postUser = createAsyncThunk(
     })
       .then((res) => {
         if (res.data.status === 200) {
-          return;
+          return res.data;
         } else {
           return rejectWithValue(res.data.error);
         }
@@ -175,7 +175,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(postUser.fulfilled, (state, action) => {
-      state.data = [...state.data, action.payload.data];
+      state.data = [...state.data, action.payload];
     });
     builder.addCase(postUser.rejected, (state) => {
       state.message = "error";
