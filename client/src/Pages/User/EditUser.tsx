@@ -70,8 +70,6 @@ const EditUser: React.FC = () => {
         if (res.type === "users/editUser/fulfilled") {
           if (userId === loggedIn.id)
             LoggedInCreate({ ...formValues, id: userId });
-
-          console.log(userId, loggedIn.id);
           navigate("/users-list");
         } else {
           alert(res.payload);

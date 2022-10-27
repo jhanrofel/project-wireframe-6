@@ -1,29 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
 
 import ConfirmModal from "../modal/confirmModal";
 import TableHeader from "../tableHeader";
 import EmptyRow from "../emptyRow";
-import { type } from "@testing-library/user-event/dist/type";
-// import { useDispatch } from "react-redux";
-// import { deleteShare } from "../../Utilitites/Slice/ShareSlice";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
+import { fetchShareOne, deleteShare } from "../../utilities/slice/shareToSlice";
+
+interface UsersOne {
+  fullname: string;
+}
+
+interface ShareTosOneState {
+  id: string;
+  user: string;
+  upload: string;
+  shareToUser: UsersOne;
+}
 
 type AppProps = {
   data: {
     headers: Array<{
-      label:string;
-      width:string;
+      label: string;
+      width: string;
     }>;
     minRows: number;
     numCols: number;
-  }
-  shareLists: string[];
-}
+  };
+  shareTos: ShareTosOneState[];
+};
 
-const TableShare = ({ data, shareLists } : AppProps) => {
-  // const dispatch = useDispatch();
-  const [removeShareId, setRemoveShareId] = useState("");
+const TableShare = ({ data, shareTos }: AppProps) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const modalData = {
@@ -33,8 +41,10 @@ const TableShare = ({ data, shareLists } : AppProps) => {
     confirmValue: "ok",
     cancelValue: "Cancel",
   };
+  const dispatch = useAppDispatch();
+  const shareToOne = useAppSelector((state) => state.shareTos.dataOne);
 
-  const removeAction = (id:string) => {
+  const removeAction = (id: string) => {
     return (
       <BsButton
         className="btn-action"
@@ -46,29 +56,29 @@ const TableShare = ({ data, shareLists } : AppProps) => {
     );
   };
 
-  const onRemoveActionHandler = (id:string):void => {
-    setRemoveShareId(id);
+  const onRemoveActionHandler = (id: string): void => {
+    dispatch(fetchShareOne(id));
     setShow(true);
   };
 
   const oneRemoveHandler = async () => {
-    // await dispatch(deleteShare(removeShareId)).then(() => {
-    //   setShow(false);
-    // });
+    await dispatch(deleteShare(shareToOne.id)).then(() => {
+      setShow(false);
+    });
   };
   return (
     <div className="table-container">
       <Table striped>
         <TableHeader headers={data.headers} />
         <tbody>
-          {shareLists.map((list, i) => (
+          {shareTos.map((shareTo, i) => (
             <tr key={i}>
-               {/* <td className="td-left">{list.toUserId.fullname}</td>
-               <td className="td-border-left">{removeAction(list._id)}</td> */}
+              <td className="td-left">{shareTo.shareToUser.fullname}</td>
+              <td className="td-border-left">{removeAction(shareTo.id)}</td>
             </tr>
           ))}
           <EmptyRow
-            count={data.minRows - shareLists.length}
+            count={data.minRows - shareTos.length}
             colCount={data.numCols}
           />
         </tbody>
@@ -80,7 +90,7 @@ const TableShare = ({ data, shareLists } : AppProps) => {
         onConfirmHandler={oneRemoveHandler}
       />
     </div>
-  )
-}
+  );
+};
 
 export default TableShare;

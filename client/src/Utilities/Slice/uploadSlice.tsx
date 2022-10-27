@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AuthToken, Unauthorize } from "../authentication";
-import { IsLogged } from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 

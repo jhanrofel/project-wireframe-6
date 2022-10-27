@@ -33,13 +33,13 @@ const FileEditModal = ({ showEdit, handleCloseEdit }: AppProps) => {
       return;
     }
 
-    interface formValues {
+    interface uploadFormValues {
       label: string;
     }
     const uploadId: string = upload.id;
     const formValues = {
       label: fileLabel,
-    } as formValues;
+    } as uploadFormValues;
 
     await dispatch(updateUpload({ uploadId, formValues })).then(() => {
       handleCloseEdit();

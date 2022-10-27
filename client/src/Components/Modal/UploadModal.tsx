@@ -3,7 +3,6 @@ import BsButton from "react-bootstrap/Button";
 import BsModal from "react-bootstrap/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { LoggedIn } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { postUpload } from "../../utilities/slice/uploadSlice";
 
@@ -24,7 +23,6 @@ const UploadModal = ({ show, handleClose }: AppProps) => {
   });
   const [formFile, setFormFile] = useState<FileList | null>(null);
   const [uploadLabel, setUploadLabel] = useState("No file chosen...");
-  const loggedIn = LoggedIn();
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;

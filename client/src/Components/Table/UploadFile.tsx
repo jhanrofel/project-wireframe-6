@@ -7,8 +7,11 @@ import EmptyRow from "../emptyRow";
 import ConfirmModal from "../modal/confirmModal";
 import FileEditModal from "../modal/fileEditModal";
 // import { ApiDownloadFile } from "../../Utilitites/Api";
-import { useAppSelector,useAppDispatch } from "../../utilities/hooks";
-import { fetchUploadOne,deleteUpload } from "../../utilities/slice/uploadSlice";
+import { useAppSelector, useAppDispatch } from "../../utilities/hooks";
+import {
+  fetchUploadOne,
+  deleteUpload,
+} from "../../utilities/slice/uploadSlice";
 
 type AppProps = {
   data: {
@@ -19,7 +22,6 @@ type AppProps = {
     minRows: number;
     numCols: number;
   };
-
 };
 
 const UploadFile = ({ data }: AppProps) => {
@@ -27,7 +29,6 @@ const UploadFile = ({ data }: AppProps) => {
   const dispatch = useAppDispatch();
   const uploadLists = useAppSelector((state) => state.uploads.data);
   const upload = useAppSelector((state) => state.uploads.dataOne);
-
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const handleClose = () => setShow(false);
@@ -151,10 +152,7 @@ const UploadFile = ({ data }: AppProps) => {
         modalData={modalData}
         onConfirmHandler={onDeleteSubmitHandler}
       />
-      <FileEditModal
-        showEdit={showEdit}
-        handleCloseEdit={handleCloseEdit}
-      />
+      <FileEditModal showEdit={showEdit} handleCloseEdit={handleCloseEdit} />
     </div>
   );
 };

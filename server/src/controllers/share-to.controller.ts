@@ -37,7 +37,10 @@ export class ShareToController {
     })
     shareTo: Omit<ShareTo, 'id'>,
   ): Promise<ShareTo> {
-    return this.shareToRepository.create(shareTo);
+    const shareToOne = await this.shareToRepository.create(shareTo);
+    return this.shareToRepository.findById(shareToOne.id, {
+      include: [{relation: 'shareToUser', scope: {fields: ['fullname']}}],
+    });
   }
 
   @get('/share-tos')
@@ -66,7 +69,9 @@ export class ShareToController {
     },
   })
   async findById(@param.path.string('id') id: string): Promise<ShareTo> {
-    return this.shareToRepository.findById(id);
+    return this.shareToRepository.findById(id, {
+      include: [{relation: 'shareToUser', scope: {fields: ['fullname']}}],
+    });
   }
 
   @del('/share-tos/{id}')

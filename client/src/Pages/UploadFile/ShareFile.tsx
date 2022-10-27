@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import BsButton from "react-bootstrap/Button";
-
 import TableShare from "../../Components/table/tableShare";
 import TableTitle from "../../Components/tableTitle";
-
-// import { LoggedIn } from "../../Utilitites/LoggedIn";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   fetchUserToShare,
-//   fetchShares,
-//   postShare,
-// } from "../../Utilitites/Slice/ShareSlice";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
+import {
+  fetchUploadShareTos,
+  fetchUploadChoose,
+  postShare,
+} from "../../utilities/slice/shareToSlice";
 
 const ShareFile: React.FC = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { state } = useLocation();
-  // const [uploadFile] = useState(state);
-  // const loggedIn = LoggedIn();
+  const [uploadFile] = useState(state);
 
   const shareFiles = {
     headers: [
@@ -27,67 +23,61 @@ const ShareFile: React.FC = () => {
     minRows: 5,
     numCols: 2,
   };
-  // const userToShare = useSelector((state) => state.share.dataUser);
-  // const shareLists = useSelector((state) => state.share.data);
-  const userToShare:string[] = []
-  const shareLists:string[] = []
+
+  const shareTos = useAppSelector((state) => state.shareTos.dataShares);
+  const shareToChoose = useAppSelector(
+    (state) => state.shareTos.dataChooseUser
+  );
+
   const [selectUser, setSelectUser] = useState("");
-  // const uploadid = uploadFile.id;
-  // const userId = loggedIn.userId;
+  const uploadid: string = uploadFile.id;
 
-  // useEffect(() => {
-  //   dispatch(fetchUserToShare({ uploadid, userId }));
-  //   dispatch(fetchShares(uploadid));
-  // }, [dispatch, uploadid, userId]);
+  useEffect(() => {
+    dispatch(fetchUploadShareTos(uploadid));
+    dispatch(fetchUploadChoose(uploadid));
+  }, [dispatch, uploadid]);
 
-  const onShareHandler = async ():Promise<void> => {
+  const onChangeSelectHandler = (event: React.FormEvent<HTMLSelectElement>) => {
+    let value = (event.target as HTMLInputElement).value;
+    setSelectUser(value);    
+  };
 
-    try {
-      if (selectUser === "") throw new Error("Choose user is required.");
-    } catch (error) {
-      // alert(error.message);
+  const onShareSubmitHandler = async (): Promise<void> => {
+    if (selectUser === "") {
+      alert("Choose user is required.");
       return;
     }
 
-    const shareFileData = {
-      // uploadFileId: uploadFile.id,
-      // fromUserId: loggedIn.userId,
-      toUserId: selectUser,
-    };
-
-    // await dispatch(postShare(shareFileData)).then(() => {
-    //   setSelectUser("");
-    // });
-
+    await dispatch(postShare({ user: selectUser, upload: uploadid })).then(
+      () => {
+        setSelectUser("");
+      }
+    );
   };
-  //${uploadFile.filename}
   return (
     <>
-      <TableTitle text={`Upload Sharing : `} />
-      <TableShare
-        data={shareFiles}
-        shareLists={shareLists}
-      />
+      <TableTitle text={`Upload Sharing : ${uploadFile.filename}`} />
+      <TableShare data={shareFiles} shareTos={shareTos} />
       <TableTitle text="Add Sharing" />
       <div className="choose-body">
         <span> Choose User : </span>
         <select
           value={selectUser}
-          onChange={(e) => setSelectUser(e.target.value)}
+          onChange={onChangeSelectHandler}
         >
           <option value="">{"--Select--"}</option>
-          {userToShare.map((user, i) => (
-            <option key={i} >
-              {/* value={user._id} {user.fullname} */}
+          {shareToChoose.map((user, i) => (
+            <option key={i} value={user.id}>
+              {user.fullname}
             </option>
           ))}
         </select>
-        <BsButton name="share" variant="light" onClick={onShareHandler}>
+        <BsButton name="share" variant="light" onClick={onShareSubmitHandler}>
           Share
         </BsButton>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default ShareFile;
