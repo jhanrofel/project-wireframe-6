@@ -60,14 +60,14 @@ export const fetchShareOne = createAsyncThunk(
   }
 );
 
-interface PostShareValues {
+interface postShareValues {
   user: string;
   upload: string;
 }
 
 export const postShare = createAsyncThunk(
   "shareTos/postShare",
-  async (formValues: PostShareValues) => {
+  async (formValues: postShareValues) => {
     return await axios({
       url: `/share-tos`,
       method: "post",
@@ -104,26 +104,26 @@ export const deleteShare = createAsyncThunk(
   }
 );
 
-interface UsersOne {
+interface userDetail {
   fullname: string;
 }
 
-interface ShareTosOneState {
+interface shareToOneState {
   id: string;
   user: string;
   upload: string;
-  shareToUser: UsersOne;
+  shareToUser: userDetail;
 }
 
-interface ShareToChooseState {
+interface shareToChooseState {
   id: string;
   fullname: string;
 }
 
-interface ShareTosState {
-  dataShares: ShareTosOneState[] | [];
-  dataChooseUser: ShareToChooseState[] | [];
-  dataOne: ShareTosOneState;
+interface shareToState {
+  dataShares: shareToOneState[] | [];
+  dataChooseUser: shareToChooseState[] | [];
+  dataOne: shareToOneState;
   loading: "idle" | "pending" | "succeeded" | "failed";
 }
 
@@ -131,7 +131,7 @@ const initialState = {
   dataShares: [],
   dataChooseUser: [],
   dataOne: {},
-} as ShareTosState;
+} as shareToState;
 
 export const shareToSlice = createSlice({
   name: "shareTos",
@@ -162,7 +162,7 @@ export const shareToSlice = createSlice({
       state.dataChooseUser = state.dataChooseUser.filter(
         (user) => user.id !== action.payload.user
       );
-      state.dataShares = [...state.dataShares,action.payload];
+      state.dataShares = [...state.dataShares, action.payload];
     });
     builder.addCase(deleteShare.fulfilled, (state) => {
       state.dataChooseUser = [

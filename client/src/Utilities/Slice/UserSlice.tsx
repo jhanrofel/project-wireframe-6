@@ -4,7 +4,7 @@ import { isLogged } from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
-interface RegisterValues {
+interface registerValues {
   fullname: string;
   email: string;
   password: string;
@@ -12,7 +12,7 @@ interface RegisterValues {
 
 export const postUser = createAsyncThunk(
   "users/postUser",
-  async (formValues: RegisterValues, { rejectWithValue }) => {
+  async (formValues: registerValues, { rejectWithValue }) => {
     return await axios({
       url: `/users`,
       method: "post",
@@ -29,14 +29,14 @@ export const postUser = createAsyncThunk(
   }
 );
 
-interface LoginValues {
+interface loginValues {
   email: string;
   password: string;
 }
 
 export const loginUser = createAsyncThunk(
   "users/loginUser",
-  async (formValues: LoginValues, { rejectWithValue }) => {
+  async (formValues: loginValues, { rejectWithValue }) => {
     return await axios({
       url: `/users/login`,
       method: "post",
@@ -91,19 +91,19 @@ export const fetchUserOne = createAsyncThunk(
   }
 );
 
-interface EditFormValues {
+interface editFormValues {
   fullname: string;
   email: string;
 }
 
-interface EditUserValues {
+interface editUserValues {
   userId: string;
-  formValues: EditFormValues;
+  formValues: editFormValues;
 }
 
 export const editUser = createAsyncThunk(
   "users/editUser",
-  async (data: EditUserValues, { rejectWithValue }) => {
+  async (data: editUserValues, { rejectWithValue }) => {
     const { userId, formValues } = data;
     return await axios({
       url: `/users/${userId}`,
@@ -141,16 +141,16 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-interface UsersOneState {
+interface userOneState {
   id: string;
   fullname: string;
   email: string;
 }
 
-interface UsersState {
+interface userState {
   logged: boolean;
-  data: UsersOneState[];
-  dataOne: UsersOneState;
+  data: userOneState[];
+  dataOne: userOneState;
   loading: "idle" | "pending" | "succeeded" | "failed";
   message: string;
 }
@@ -160,7 +160,7 @@ const initialState = {
   data: [{}],
   dataOne: {},
   loading: "idle",
-} as UsersState;
+} as userState;
 
 export const userSlice = createSlice({
   name: "users",
@@ -195,7 +195,7 @@ export const userSlice = createSlice({
     builder.addCase(fetchUserOne.fulfilled, (state, action) => {
       state.dataOne = action.payload;
     });
-    builder.addCase(editUser.fulfilled, (state, action) => {
+    builder.addCase(editUser.fulfilled, (state) => {
       state.dataOne = { id: "", fullname: "", email: "" };
     });
     builder.addCase(editUser.rejected, (state) => {

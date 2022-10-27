@@ -42,42 +42,46 @@ export const fetchChats = createAsyncThunk("chats/fetchUsers", async () => {
     });
 });
 
-export const fetchUserChats = createAsyncThunk("chats/fetchUserChats", async (userId:string) => {
-  return await axios({
-    url: `/users/${userId}/chats`,
-    method: "get",
-    headers: {
-      Authorization: AuthToken(),
-    },
-  })
-    .then((res) => res.data)
-    .catch((error) => {
-      if (error.response.data.error.name === "UnauthorizedError") Unauthorize();
-      return error;
-    });
-});
+export const fetchUserChats = createAsyncThunk(
+  "chats/fetchUserChats",
+  async (userId: string) => {
+    return await axios({
+      url: `/users/${userId}/chats`,
+      method: "get",
+      headers: {
+        Authorization: AuthToken(),
+      },
+    })
+      .then((res) => res.data)
+      .catch((error) => {
+        if (error.response.data.error.name === "UnauthorizedError")
+          Unauthorize();
+        return error;
+      });
+  }
+);
 
-interface UserDetail {
+interface userDetail {
   fullname: string;
 }
 
-interface ChatsOneState {
+interface chatOneState {
   id: string;
   dateSend: string;
   message: string;
   user: string;
-  chatUser: UserDetail;
+  chatUser: userDetail;
 }
 
-interface ChatsState {
-  data: ChatsOneState[];
+interface chatState {
+  data: chatOneState[];
   loading: "idle" | "pending" | "succeeded" | "failed";
 }
 
 const initialState = {
   data: [],
   loading: "idle",
-} as ChatsState;
+} as chatState;
 
 export const chatSlice = createSlice({
   name: "chats",

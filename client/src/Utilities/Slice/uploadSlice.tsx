@@ -65,18 +65,18 @@ export const postUpload = createAsyncThunk(
   }
 );
 
-interface EditFormValues {
+interface editFormValues {
   label: string;
 }
 
-interface EditUploadValue {
+interface editUploadValue {
   uploadId: string;
-  formValues: EditFormValues;
+  formValues: editFormValues;
 }
 
 export const updateUpload = createAsyncThunk(
   "uploads/updateUpload",
-  async (data: EditUploadValue) => {
+  async (data: editUploadValue) => {
     const { uploadId, formValues } = data;
     return await axios({
       url: `/uploads/${uploadId}`,
@@ -99,7 +99,7 @@ export const updateUpload = createAsyncThunk(
 
 export const deleteUpload = createAsyncThunk(
   "uploads/deleteUpload",
-  async (uploadId:string) => {
+  async (uploadId: string) => {
     return await axios({
       url: `/uploads/${uploadId}`,
       method: "delete",
@@ -116,7 +116,7 @@ export const deleteUpload = createAsyncThunk(
   }
 );
 
-interface UploadsOneState {
+interface uploadsOneState {
   id: string;
   label: string;
   filename: string;
@@ -124,9 +124,9 @@ interface UploadsOneState {
   user: string;
 }
 
-interface UploadsState {
-  data: UploadsOneState[];
-  dataOne: UploadsOneState;
+interface uploadsState {
+  data: uploadsOneState[];
+  dataOne: uploadsOneState;
   loading: "idle" | "pending" | "succeeded" | "failed";
 }
 
@@ -134,7 +134,7 @@ const initialState = {
   data: [{}],
   dataOne: {},
   loading: "idle",
-} as UploadsState;
+} as uploadsState;
 
 export const uploadSlice = createSlice({
   name: "uploads",
