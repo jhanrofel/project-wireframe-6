@@ -179,18 +179,18 @@ interface userSharesState {
 
 interface userState {
   logged: boolean;
-  data: userOneState[];
+  data: userOneState[] | [];
   dataOne: userOneState;
-  dataShare: userSharesState[];
+  dataShare: userSharesState[] | [];
   loading: "idle" | "pending" | "succeeded" | "failed";
   message: string;
 }
 
 const initialState = {
   logged: isLogged() ? true : false,
-  data: [{}],
+  data: [],
   dataOne: {},
-  dataShare: [{}],
+  dataShare: [],
   loading: "idle",
 } as userState;
 
