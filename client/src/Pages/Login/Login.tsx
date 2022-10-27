@@ -41,7 +41,6 @@ const Login: React.FC = () => {
   };
 
   const onLoginSubmitHandler = async () => {
-
     if (formValues.email === "")
       setFormErrors((state) => ({
         ...state,
@@ -53,19 +52,19 @@ const Login: React.FC = () => {
         password: "Password is required.",
       }));
 
-      interface postValue {
-        email: string;
-        password: string;
-      }
-    
-      const postFormValue: postValue = {
-        email: formValues.email,
-        password: formValues.password,
-      };
+    interface postValue {
+      email: string;
+      password: string;
+    }
+
+    const postFormValue: postValue = {
+      email: formValues.email,
+      password: formValues.password,
+    };
 
     if (formValues.email !== "" && formValues.password !== "") {
       await dispatch(loginUser(postFormValue)).then((res) => {
-        if (res.type === 'users/loginUser/fulfilled') {
+        if (res.type === "users/loginUser/fulfilled") {
           cookiesCreate(res.payload.message);
           LoggedInCreate(res.payload.users[0]);
           navigate("/login-success");
