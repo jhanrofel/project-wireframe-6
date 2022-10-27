@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../Components/header";
+import Header from "../../components/header";
 import { loggedInData } from "../../utilities/loggedIn";
 
 const LoginSuccessful: React.FC = () => {

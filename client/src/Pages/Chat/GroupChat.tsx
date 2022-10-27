@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../Components/button";
+import Button from "../../components/button";
 import { loggedInData } from "../../utilities/loggedIn";
 import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
 import { postChat, fetchUserChats } from "../../utilities/slice/chatSlice";

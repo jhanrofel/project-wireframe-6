@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import TableUploadFile from "../../Components/table/uploadFile";
-import ShareUpload from "../../Components/table/shareUpload";
-import TableTitle from "../../Components/tableTitle";
-import Button from "../../Components/button";
-import UploadModal from "../../Components/modal/uploadModal";
+import TableUploadFile from "../../components/table/uploadFile";
+import ShareUpload from "../../components/table/shareUpload";
+import TableTitle from "../../components/tableTitle";
+import Button from "../../components/button";
+import UploadModal from "../../components/modal/uploadModal";
 import { loggedInData } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { fetchUploads } from "../../utilities/slice/uploadSlice";

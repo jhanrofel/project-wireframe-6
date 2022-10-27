@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import BsButton from "react-bootstrap/Button";
-import TableShare from "../../Components/table/tableShare";
-import TableTitle from "../../Components/tableTitle";
+import TableShare from "../../components/table/tableShare";
+import TableTitle from "../../components/tableTitle";
 import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
 import {
   fetchUploadShareTos,

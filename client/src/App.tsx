@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Welcome from "./Pages/welcome/welcome";
-import Login from "./Pages/login/login";
-import LoginSuccessful from "./Pages/login/loginSuccessful";
-import Register from "./Pages/register/register";
-import RegisterSuccessful from "./Pages/register/registerSuccessful";
-import ManageUser from "./Pages/user/manageUser";
-import EditUser from "./Pages/user/editUser";
-import ManageDocument from "./Pages/uploadFile/manageDocument";
-import ShareFile from "./Pages/uploadFile/shareFile";
-import GroupChat from "./Pages/chat/groupChat";
-import PageNotFound from "./Pages/pageNotFound";
-import ProtectedLayout from "./Pages/layout/protectedLayout";
-import PublicLayout from "./Pages/layout/publicLayout";
+import Welcome from "./pages/welcome/welcome";
+import Login from "./pages/login/login";
+import LoginSuccessful from "./pages/login/loginSuccessful";
+import Register from "./pages/register/register";
+import RegisterSuccessful from "./pages/register/registerSuccessful";
+import ManageUser from "./pages/user/manageUser";
+import EditUser from "./pages/user/editUser";
+import ManageDocument from "./pages/uploadFile/manageDocument";
+import ShareFile from "./pages/uploadFile/shareFile";
+import GroupChat from "./pages/chat/groupChat";
+import PageNotFound from "./pages/pageNotFound";
+import ProtectedLayout from "./pages/layout/protectedLayout";
+import PublicLayout from "./pages/layout/publicLayout";
 
 function App() {
   return (

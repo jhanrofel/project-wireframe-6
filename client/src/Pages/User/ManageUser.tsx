@@ -1,6 +1,6 @@
 import React,{useEffect} from "react";
-import TableUser from "../../Components/table/userTable";
-import TableTitle from "../../Components/tableTitle";
+import TableUser from "../../components/table/userTable";
+import TableTitle from "../../components/tableTitle";
 import { useAppDispatch } from "../../utilities/hooks";
 import { fetchUsers } from "../../utilities/slice/userSlice";
 
