@@ -1,5 +1,5 @@
 import { cookiesToken, cookiesRemove } from "./cookies";
-import { LoggedInRemove } from "./loggedIn";
+import { loggedInRemove } from "./loggedIn";
 
 export const AuthToken = (): string => {
   const token = cookiesToken();
@@ -7,6 +7,6 @@ export const AuthToken = (): string => {
 };
 
 export const Unauthorize = () => {
-  LoggedInRemove();
+  loggedInRemove();
   cookiesRemove();
 };

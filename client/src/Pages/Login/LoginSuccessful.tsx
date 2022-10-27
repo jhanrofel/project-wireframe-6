@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import Header from "../../Components/header";
-import { LoggedIn } from "../../utilities/loggedIn";
+import { loggedInData } from "../../utilities/loggedIn";
 
 const LoginSuccessful: React.FC = () => {
-  const loggedIn = LoggedIn();
+  const loggedIn = loggedInData();
   return (
     <div className="container-fluid">
       <div className="main">
@@ -14,7 +14,7 @@ const LoginSuccessful: React.FC = () => {
         </h5>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default LoginSuccessful;

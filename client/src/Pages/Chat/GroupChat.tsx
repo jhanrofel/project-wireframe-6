@@ -3,24 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Components/button";
-import { LoggedIn } from "../../utilities/loggedIn";
+import { loggedInData } from "../../utilities/loggedIn";
 import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
-// import { SocketConnect } from "../../Utilitites/Socket";
 import { postChat, fetchUserChats } from "../../utilities/slice/chatSlice";
 
 const GroupChat: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const chats = useAppSelector((state) => state.chats.data);
-  // const socket = SocketConnect();
-  const loggedIn = LoggedIn();
+  const loggedIn = loggedInData();
   const closeButton = <FontAwesomeIcon icon={faXmark} />;
   const [chat, setChat] = useState<string>("");
   const bottomRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(fetchUserChats(loggedIn.id));
-  }, [dispatch]);
+  }, [dispatch, loggedIn.id]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,15 +60,8 @@ const GroupChat: React.FC = () => {
       message: chat,
     } as ChatData;
 
-    // const newChat = {
-    //   userId: { fullname: loggedIn.fullname },
-    //   dateSend: dateSend,
-    //   message: chat,
-    // };
-
     dispatch(postChat(chatData)).then(() => {
       setChat("");
-      // socket.emit("send_message", { message: newChat });
     });
 
     return;

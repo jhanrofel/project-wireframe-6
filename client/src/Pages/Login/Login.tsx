@@ -4,13 +4,11 @@ import Header from "../../Components/header";
 import Button from "../../Components/button";
 import InputGroup from "../../Components/inputGroup";
 import { cookiesCreate } from "../../utilities/cookies";
-import { LoggedInCreate } from "../../utilities/loggedIn";
-// import { SocketConnect } from "../../Utilitites/Socket";
+import { loggedInCreate } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { loginUser } from "../../utilities/slice/userSlice";
 
 const Login: React.FC = () => {
-  // const socket = SocketConnect();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -66,7 +64,7 @@ const Login: React.FC = () => {
       await dispatch(loginUser(postFormValue)).then((res) => {
         if (res.type === "users/loginUser/fulfilled") {
           cookiesCreate(res.payload.message);
-          LoggedInCreate(res.payload.users[0]);
+          loggedInCreate(res.payload.users[0]);
           navigate("/login-success");
         } else {
           alert(res.payload);

@@ -6,7 +6,7 @@ interface userLoggedIn {
   email: string;
 }
 
-export const LoggedInCreate = (user: userLoggedIn): void => {
+export const loggedInCreate = (user: userLoggedIn): void => {
   localStorage.setItem(
     "loggedIn",
     JSON.stringify({
@@ -17,17 +17,17 @@ export const LoggedInCreate = (user: userLoggedIn): void => {
   );
 };
 
-export const IsLogged = (): number => {
+export const isLogged = (): number => {
   const token = cookiesToken();
   return localStorage.getItem("loggedIn") && token ? 1 : 0;
 };
 
-export const LoggedIn = (): userLoggedIn => {
+export const loggedInData = (): userLoggedIn => {
   const loggedIn: string = localStorage.getItem("loggedIn") || "";
   const parseLoggedIn: userLoggedIn = JSON.parse(loggedIn);
   return parseLoggedIn;
 };
 
-export const LoggedInRemove = (): void => {
+export const loggedInRemove = (): void => {
   localStorage.removeItem("loggedIn");
 };

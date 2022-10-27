@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import BsButton from "react-bootstrap/Button";
 import ConfirmModal from "../modal/confirmModal";
 import TableHeader from "../tableHeader";
 import EmptyRow from "../emptyRow";
-import { LoggedIn } from "../../utilities/loggedIn";
-import { useAppDispatch,useAppSelector } from "../../utilities/hooks"
+import { loggedInData } from "../../utilities/loggedIn";
+import { useAppDispatch, useAppSelector } from "../../utilities/hooks";
 import { deleteUser } from "../../utilities/slice/userSlice";
 
 type AppProps = {
   data: {
     name: string;
     headers: Array<{
-      label:string;
-      width:string;
+      label: string;
+      width: string;
     }>;
     minRows: number;
     numCols: number;
@@ -29,13 +29,13 @@ interface UsersOneState {
 
 const UserTable = ({ data }: AppProps) => {
   const dispatch = useAppDispatch();
-  const loggedIn = LoggedIn();
+  const loggedIn = loggedInData();
   const navigate = useNavigate();
-  const lists:UsersOneState[] = useAppSelector((state) => state.users.data);
+  const lists: UsersOneState[] = useAppSelector((state) => state.users.data);
   const [deleteUserId, setDeleteUserId] = useState<string>("");
   const [userDeleted, setUserDeleted] = useState<string>("");
   const [show, setShow] = useState(false);
-  const handleClose = ():void => setShow(false);
+  const handleClose = (): void => setShow(false);
   const modalData = {
     header: "Confirm User Deletion",
     body: "Are you sure ?",
@@ -47,7 +47,7 @@ const UserTable = ({ data }: AppProps) => {
   const [users, setUsers] = useState<UsersOneState[]>(lists);
   useEffect(() => {
     setUsers(lists);
-  }, [lists,userDeleted]);
+  }, [lists, userDeleted]);
 
   const editAction = (id: string) => {
     return (
@@ -92,13 +92,13 @@ const UserTable = ({ data }: AppProps) => {
       setShow(false);
     });
   };
-  
+
   return (
     <div className="table-container">
       <Table striped>
         <TableHeader headers={data.headers} />
         <tbody>
-          {users.map((user:UsersOneState, i) => (
+          {users.map((user: UsersOneState, i) => (
             <tr key={i}>
               <td className="td-left">{user.fullname}</td>
               <td className="td-border">{user.email}</td>

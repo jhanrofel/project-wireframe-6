@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { IsLogged } from "../../utilities/loggedIn";
+import { isLogged } from "../../utilities/loggedIn";
 import NavBar from "./navigationBar";
 
 const ProtectedLayout: React.FC = () => {
-  return IsLogged() ? (
+  return isLogged() ? (
     <>
       <NavBar /> <Outlet />
     </>

@@ -4,12 +4,12 @@ import ShareUpload from "../../Components/table/shareUpload";
 import TableTitle from "../../Components/tableTitle";
 import Button from "../../Components/button";
 import UploadModal from "../../Components/modal/uploadModal";
-import { LoggedIn } from "../../utilities/loggedIn";
+import { loggedInData } from "../../utilities/loggedIn";
 import { useAppDispatch } from "../../utilities/hooks";
 import { fetchUploads } from "../../utilities/slice/uploadSlice";
 
 const ManageDocument: React.FC = () => {
-  const loggedIn = LoggedIn();
+  const loggedIn = loggedInData();
   const dispatch = useAppDispatch();
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AuthToken, Unauthorize } from "../authentication";
-import { IsLogged } from "../loggedIn";
+import { isLogged } from "../loggedIn";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -84,7 +84,8 @@ export const fetchUserOne = createAsyncThunk(
     })
       .then((res) => res.data)
       .catch((error) => {
-        if (error.response.data.error.name === "UnauthorizedError") Unauthorize();
+        if (error.response.data.error.name === "UnauthorizedError")
+          Unauthorize();
         return error;
       });
   }
@@ -155,7 +156,7 @@ interface UsersState {
 }
 
 const initialState = {
-  logged: IsLogged() ? true : false,
+  logged: isLogged() ? true : false,
   data: [{}],
   dataOne: {},
   loading: "idle",

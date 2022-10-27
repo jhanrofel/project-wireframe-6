@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../utilities/hooks";
 import { cookiesRemove } from "../../utilities/cookies";
-import { LoggedInRemove } from "../../utilities/loggedIn";
+import { loggedInRemove } from "../../utilities/loggedIn";
 import { clearUser } from "../../utilities/slice/userSlice";
 import { clearChat } from "../../utilities/slice/chatSlice";
 import { clearUpload } from "../../utilities/slice/uploadSlice";
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
     dispatch(clearChat());
     dispatch(clearUpload());
     dispatch(clearShareTo());
-    LoggedInRemove();
+    loggedInRemove();
     cookiesRemove();
   };
   return (
